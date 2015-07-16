@@ -30,4 +30,8 @@ StatsTable
   loss Int
   Team team
   deriving Show
+MD5
+  hash String
+  Hash hash
+  deriving Show
 |]
