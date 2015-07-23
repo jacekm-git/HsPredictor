@@ -1,4 +1,4 @@
-module TestSuites.LoadCSV (tests_LoadCSV) where
+module TestSuites.LoadCSVSpec (spec) where
 
 --standard
 import Control.Exception (bracket, catch, throwIO, )
@@ -6,17 +6,18 @@ import Prelude hiding (catch)
 import System.Directory (removeFile)
 import System.IO.Error 
 --3rd party
+import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
 --own
 import LoadCSV
 import Types
 
 
-tests_LoadCSV = TestList [
-  test_stats,
-  test_teams,
-  test_resultsUpcoming,
-  test_resultsAll
+spec = fromHUnitTest $ TestList [
+  TestLabel ">>stats" test_stats,
+  TestLabel ">>teams"  test_teams,
+  TestLabel ">>resultsUpcoming"  test_resultsUpcoming,
+  TestLabel ">>resultsAll"  test_resultsAll
   ]
                 
 testFilePath = "tests/tmp/test_file.csv"

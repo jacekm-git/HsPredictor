@@ -1,11 +1,12 @@
-module TestSuites.HashCSV (tests_HashCSV) where
+module TestSuites.HashCSVSpec (spec) where
 
+import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
 import HashCSV
 
-tests_HashCSV = TestList [
-  test_genHash
-  , test_checkHash
+spec = fromHUnitTest $ TestList [
+  TestLabel ">>genHash" test_genHash
+  , TestLabel ">>checkHash" test_checkHash
   ]
 
 test_genHash = TestCase $ do

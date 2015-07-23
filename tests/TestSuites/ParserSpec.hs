@@ -1,11 +1,12 @@
-module TestSuites.Parser (tests_Parser) where
+module TestSuites.ParserSpec (spec) where
 
+import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
 import Parser
 import Types
 
-tests_Parser = TestList [
-  test_readMatches
+spec = fromHUnitTest $ TestList [
+  TestLabel ">>readMatches"  test_readMatches
   ]
 
 test_readMatches = TestCase $ do
@@ -37,6 +38,3 @@ test_readMatches = TestCase $ do
   assertEqual "Upcoming match bad2"
     []
     (readMatches r7)
-
-  
-

@@ -68,14 +68,11 @@ bulkInsert :: [Match] -> String -> String -> SqlPersistM ()
 bulkInsert xs hashF hashDB = do
   case checkHash hashF hashDB of
     True -> do
-      liftIO $ print "Dropping tables..."
       deleteWhere ([] :: [Filter Results])
       deleteWhere ([] :: [Filter StatsTable])
       deleteWhere ([] :: [Filter Teams])
-      liftIO $ print "Inserting csv into tables."
       mapM_ insertMatch xs
     False -> do
-      liftIO $ print "Nothing to do. Md5sums match."
       return ()
     
 action :: [Match] -> String -> String -> IO ()
@@ -84,11 +81,9 @@ action xs hashF dbname = runSqlite (pack dbname) $ do
   isHashDB <- get $ (toSqlKey 1 :: MD5Id)
   case isHashDB of
    Nothing -> do
-     liftIO $ print "New file md5sum..."
      insertBy $ MD5 hashF
      bulkInsert xs hashF ""
    Just h ->  do
-     liftIO $ print "Comparing Hashes"
      update (toSqlKey 1 :: MD5Id) [MD5Hash =. hashF]
      bulkInsert xs hashF $ mD5Hash h
   return ()
