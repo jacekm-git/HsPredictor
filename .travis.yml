@@ -4,7 +4,6 @@ cache:
   directories:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
 install:
-- $TRAVIS_BUILD_DIR
 - cabal sandbox init
 - cabal install --only-dependencies --enable-tests
 before_script:  
