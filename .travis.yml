@@ -2,8 +2,9 @@ language: haskell
 ghc: 7.8
 cache:
   directories:
-    - /home/travis/build/jacekm-git/HsPredictor/.cabal-sandbox
+    - $TRAVIS_BUILD_DIR/.cabal-sandbox
 install:
+- echo TRAVIS_BUILD_DIR: $TRAVIS_BUILD_DIR
 - cabal sandbox init
 - cabal install --only-dependencies --enable-tests
 before_script:  
