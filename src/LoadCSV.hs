@@ -26,10 +26,10 @@ import Models
 import HashCSV (genHash, checkHash)
 
 insertMatch :: Match -> SqlPersistM ()
-insertMatch (d, ht, at, rh, ra) = do
+insertMatch (d, ht, at, rh, ra, odds1x, oddsx, oddsx2) = do
   idHome <- getKeyTeams ht
   idAway <- getKeyTeams at
-  insert $ Results d idHome idAway rh ra
+  insert $ Results d idHome idAway rh ra odds1x oddsx oddsx2
   updateTable idHome $ getResult Home rh ra
   updateTable idAway $ getResult Away rh ra
 

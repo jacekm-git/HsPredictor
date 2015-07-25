@@ -21,7 +21,7 @@ spec = fromHUnitTest $ TestList [
   TestLabel ">>reloadCSV" test_reloadCSV
   ]
                 
-testFilePath = "tests/tmp/test_file.csv"
+testFilePath = "tests/tmp/test.csv"
 testDbPath = "tests/tmp/test.db"
 
 setUp = do
@@ -37,10 +37,10 @@ removeIfExists fileName = removeFile fileName `catch` handleExists
 test_stats = TestCase $ do
   setUp
   teams <- getTeams testDbPath
-  s1 <- filterStats "Freiburg" teams
-  s2 <- filterStats "Leverkusen" teams
-  assertEqual "Freiburg stats" s1 [14,9,11]
-  assertEqual "Leverkusen stats" s2 [19,8,7]
+  s1 <- filterStats "Blue" teams
+  s2 <- filterStats "Red" teams
+  assertEqual "Blue stats" s1 [4,4,4]
+  assertEqual "Red stats" s2 [2,2,2]
   where
     filterStats t teams = flip getStats testDbPath
                           ((filter (\x -> x==t) teams)!!0)
@@ -48,23 +48,23 @@ test_stats = TestCase $ do
 test_teams = TestCase $ do
   setUp
   teams <- getTeams testDbPath
-  assertEqual "Num of teams" (length teams) (18)
+  assertEqual "Num of teams" (length teams) (3)
 
 test_resultsAll = TestCase $ do
   setUp
   r <- getResultsAll testDbPath
-  assertEqual "results all" (length r) (307)
+  assertEqual "results all" (length r) (14)
 
 test_resultsUpcoming = TestCase $ do
   setUp
   r <- getResultsUpcoming testDbPath
-  assertEqual "result upcomings" (length r) (1)  
+  assertEqual "result upcomings" (length r) (2)  
   
 test_reloadCSV = TestCase $ do
   setUp
   r <- getResultsAll testDbPath
-  assertEqual "results all length" (length r) (307)
+  assertEqual "results all length" (length r) (14)
   loadCSV testFilePath testDbPath -- load again
   r1 <- getResultsAll testDbPath
-  assertEqual "results length after reload" (length r1) (307)
+  assertEqual "results length after reload" (length r1) (14)
   assertEqual "results before and after" r r1

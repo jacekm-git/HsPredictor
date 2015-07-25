@@ -22,6 +22,9 @@ Results
   awayTeam TeamsId
   resultHome Int
   resultAway Int
+  odds1x Double
+  oddsx Double
+  oddsx2 Double
   deriving Show
 StatsTable
   team TeamsId
