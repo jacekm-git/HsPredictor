@@ -17,9 +17,9 @@ readMatch input = case parse parseCsv "csv" input of
   Right val -> return val
 
 readMatches :: [String] ->  [Match]
-readMatches xs = foldr (\x acc -> case readMatch x of
+readMatches = foldr (\x acc -> case readMatch x of
                                    Left _ -> acc
-                                   Right m -> m:acc) [] xs
+                                   Right m -> m:acc) []
 
 parseCsv :: Parser Match
 parseCsv = do

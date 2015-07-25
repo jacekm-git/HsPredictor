@@ -13,9 +13,7 @@ genHash fileContent = do
   return $ show md5Digest
 
 checkHash :: String -> String -> Bool
-checkHash hashFile hashDB = if hashFile == hashDB
-                            then False
-                            else True
+checkHash hashFile hashDB = hashFile /= hashDB
 
 
 

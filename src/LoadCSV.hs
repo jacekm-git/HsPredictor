@@ -6,12 +6,13 @@ import System.IO (openFile, hGetContents,
                   hClose, IOMode(ReadMode))
 import Data.Text (pack)
 import Control.Monad.Error (liftIO)
+import Control.Monad (when)
 -- 3rd party
 --import Database.Persist.Sql
-import Database.Persist.Sql  (SqlBackend, Filter, SelectOpt (LimitTo),
-                              SqlPersistM, Entity(..), Key(..))
 import Database.Persist.Sqlite (runSqlite)
-import Database.Persist.Sql (insertBy, runMigration,get,
+import Database.Persist.Sql (SqlBackend, Filter, SelectOpt (LimitTo),
+                             SqlPersistM, Entity(..), Key(..),
+                             insertBy, runMigration,get,
                              entityKey, insert, update,
                              (+=.), (=.), (>.), (==.),
                              getBy, selectList,
@@ -65,20 +66,17 @@ keyFromEither (Left ent) = entityKey ent
 keyFromEither (Right key) = key
 
 bulkInsert :: [Match] -> String -> String -> SqlPersistM ()
-bulkInsert xs hashF hashDB = do
-  case checkHash hashF hashDB of
-    True -> do
-      deleteWhere ([] :: [Filter Results])
-      deleteWhere ([] :: [Filter StatsTable])
-      deleteWhere ([] :: [Filter Teams])
-      mapM_ insertMatch xs
-    False -> do
-      return ()
+bulkInsert xs hashF hashDB =
+  when (checkHash hashF hashDB) $ do
+    deleteWhere ([] :: [Filter Results])
+    deleteWhere ([] :: [Filter StatsTable])
+    deleteWhere ([] :: [Filter Teams])
+    mapM_ insertMatch xs
     
 action :: [Match] -> String -> String -> IO ()
 action xs hashF dbname = runSqlite (pack dbname) $ do
   runMigrationSilent migrateAll
-  isHashDB <- get $ (toSqlKey 1 :: MD5Id)
+  isHashDB <- get (toSqlKey 1 :: MD5Id)
   case isHashDB of
    Nothing -> do
      insertBy $ MD5 hashF
@@ -92,7 +90,7 @@ loadCSV :: String -> String -> IO ()
 loadCSV fname  dbname = do
   csvH <- openFile fname ReadMode
   full <- hGetContents csvH
-  hash <- genHash $ full
+  hash <- genHash full
   let matches = readMatches $ lines full
   action matches hash dbname
   hClose csvH
@@ -109,14 +107,14 @@ getStats team dbname = runSqlite (pack dbname) $ do
   case teamId of
    [] -> return []
    (x:[]) -> do
-     stats <- selectList [StatsTableTeam ==. (entityKey x)] [LimitTo 1]
-     return $ [getStat statsTableWin stats ,
-               getStat statsTableDraw stats,
-               getStat statsTableLoss stats]
+     stats <- selectList [StatsTableTeam ==. entityKey x] [LimitTo 1]
+     return [getStat statsTableWin stats ,
+             getStat statsTableDraw stats,
+             getStat statsTableLoss stats]
      where
        getStat f = f . entityVal . head
 
-qResultsAll dbname = runSqlite (pack dbname)
+getResultsAll dbname = runSqlite (pack dbname)
               $ E.select
               $ E.from $ \(t1 `E.InnerJoin` r `E.InnerJoin` t2) -> do
                 E.on $ r ^. ResultsHomeTeam E.==. t1 ^. TeamsId
@@ -128,7 +126,7 @@ qResultsAll dbname = runSqlite (pack dbname)
                   r ^. ResultsResultHome,
                   r ^. ResultsResultAway)
 
-qResultsUpcoming dbname = runSqlite (pack dbname)
+getResultsUpcoming dbname = runSqlite (pack dbname)
               $ E.select
               $ E.from $ \(t1 `E.InnerJoin` r `E.InnerJoin` t2) -> do
                 E.on $ r ^. ResultsHomeTeam E.==. t1 ^. TeamsId
@@ -139,13 +137,4 @@ qResultsUpcoming dbname = runSqlite (pack dbname)
                   t1 ^. TeamsName,
                   t2 ^. TeamsName,
                   r ^. ResultsResultHome,
-                  r ^. ResultsResultAway)                  
-
-
-getResultsAll dbname = do
-  r <- qResultsAll dbname
-  return r
-
-getResultsUpcoming dbname = do
-  r <- qResultsUpcoming dbname
-  return r  
+                  r ^. ResultsResultAway)
