@@ -18,7 +18,8 @@ spec = fromHUnitTest $ TestList [
   TestLabel ">>teams"  test_teams,
   TestLabel ">>resultsUpcoming"  test_resultsUpcoming,
   TestLabel ">>resultsAll"  test_resultsAll,
-  TestLabel ">>reloadCSV" test_reloadCSV
+  TestLabel ">>reloadCSV" test_reloadCSV,
+  TestLabel ">>getFileContents" test_getFileContents
   ]
                 
 testFilePath = "tests/tmp/test.csv"
@@ -68,3 +69,7 @@ test_reloadCSV = TestCase $ do
   r1 <- getResultsAll testDbPath
   assertEqual "results length after reload" (length r1) (14)
   assertEqual "results before and after" r r1
+
+test_getFileContents = TestCase $ do
+  c <- getFileContents testFilePath
+  assertBool "getFileContents" ("" /= c)

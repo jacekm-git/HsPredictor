@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE FlexibleContexts          #-}
+{-# LANGUAGE BangPatterns          #-}
 module LoadCSV where
 -- standard
 import System.IO (openFile, hGetContents,
@@ -86,14 +87,19 @@ action xs hashF dbname = runSqlite (pack dbname) $ do
      bulkInsert xs hashF $ mD5Hash h
   return ()
 
+getFileContents :: String -> IO String
+getFileContents fname = do
+  csvH <- openFile fname ReadMode
+  !full <- hGetContents csvH
+  hClose csvH
+  return full
+
 loadCSV :: String -> String -> IO ()
 loadCSV fname  dbname = do
-  csvH <- openFile fname ReadMode
-  full <- hGetContents csvH
+  full <- getFileContents fname
   hash <- genHash full
   let matches = readMatches $ lines full
   action matches hash dbname
-  hClose csvH
 
 -- queries
 getTeams :: String -> IO [String]
