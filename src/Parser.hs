@@ -8,7 +8,7 @@ import Text.ParserCombinators.Parsec (parse, Parser, many,
                                       digit, noneOf, char,
                                       count, eof, (<|>), try)
 -- own
-import Types (Match, ThrowsError)
+import Types (Match (..), ThrowsError)
 
 
 readMatch :: String -> ThrowsError Match
@@ -27,9 +27,9 @@ parseCsv = do
   homeT <- parseTeam
   awayT <- parseTeam
   (goalsH, goalsA) <- parseGoals
-  (odd1x, oddx, oddx2) <- parseOdds
+  (odd1, oddx, odd2) <- parseOdds
   eof
-  return (date, homeT, awayT, goalsH, goalsA, odd1x, oddx, oddx2)
+  return $ Match date homeT awayT goalsH goalsA odd1 oddx odd2
 
 -- Parsers for parseCSV  
 parseDate :: Parser Int
@@ -58,14 +58,14 @@ parseGoals = do
 
 parseOdds :: Parser (Double, Double, Double)
 parseOdds = do
-  odd1x <- minusOne <|> odds
+  odd1 <- minusOne <|> odds
   char ','
-  oddx <- checkField odd1x odds
+  oddx <- checkField odd1 odds
   char ','
-  oddx2 <- checkField oddx odds
-  return (read odd1x :: Double,
+  odd2 <- checkField oddx odds
+  return (read odd1 :: Double,
           read oddx :: Double,
-          read oddx2 :: Double)
+          read odd2 :: Double)
 
 minusOne :: Parser String
 minusOne = do

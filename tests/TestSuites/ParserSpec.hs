@@ -18,7 +18,7 @@ test_readMatches = TestCase $ do
   let r6 = ["2012.08.24,Dortmund,Bremen,-1,1,1.0,2.0,3.0"]
   let r7 = ["2012.08.24,Dortmund,Bremen,1,-1,-1,-1,-1"]
   assertEqual "Good input"
-    [(20120824, "Dortmund" ,"Bremen", 2, 3, 1, 2, 3)]
+    [Match 20120824 "Dortmund" "Bremen" 2 3 1 2 3]
     (readMatches r1)
   assertEqual "Wrong date format"
     []
@@ -30,7 +30,7 @@ test_readMatches = TestCase $ do
     []
     (readMatches r4)
   assertEqual "Upcoming match good input"
-    [(20120824, "Dortmund" ,"Bremen", -1, -1, 1.0, 2.0, 3.0 )]
+    [Match 20120824 "Dortmund" "Bremen" (-1) (-1) 1.0 2.0 3.0]
     (readMatches r5)
   assertEqual "Upcoming match bad1"
     []

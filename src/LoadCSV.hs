@@ -23,17 +23,18 @@ import qualified Database.Esqueleto      as E
 import           Database.Esqueleto      ((^.))
 -- own
 import Parser (readMatches)
-import Types (Result (..), Field (..), Match)
+import Types (Result (..), Field (..), Match (..))
 import Models
 import HashCSV (genHash, checkHash)
 
 insertMatch :: Match -> SqlPersistM ()
-insertMatch (d, ht, at, rh, ra, odds1x, oddsx, oddsx2) = do
+insertMatch (Match {dateM=d,homeM=ht,awayM=at,ghM=gh,gaM=ga,
+                    odds1M=o1,oddsxM=ox,odds2M=o2}) = do
   idHome <- getKeyTeams ht
   idAway <- getKeyTeams at
-  insert $ Results d idHome idAway rh ra odds1x oddsx oddsx2
-  updateTable idHome $ getResult Home rh ra
-  updateTable idAway $ getResult Away rh ra
+  insert $ Results d idHome idAway gh ga o1 ox o2
+  updateTable idHome $ getResult Home gh ga
+  updateTable idAway $ getResult Away gh ga
 
 getKeyTeams :: String -> SqlPersistM (Key Teams)
 getKeyTeams team = do
