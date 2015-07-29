@@ -3,6 +3,7 @@ module Parser where
 -- standard
 import Control.Monad.Error (liftIO, throwError, fail)
 import Control.Monad (replicateM)
+import Data.List (sort)
 -- 3rd party
 import Text.ParserCombinators.Parsec (parse, Parser, many,
                                       digit, noneOf, char,
@@ -17,7 +18,7 @@ readMatch input = case parse parseCsv "csv" input of
   Right val -> return val
 
 readMatches :: [String] ->  [Match]
-readMatches = foldr (\x acc -> case readMatch x of
+readMatches = sort . foldr (\x acc -> case readMatch x of
                                    Left _ -> acc
                                    Right m -> m:acc) []
 

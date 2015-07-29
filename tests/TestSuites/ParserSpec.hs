@@ -17,6 +17,7 @@ test_readMatches = TestCase $ do
   let r5 = ["2012.08.24,Dortmund,Bremen,-1,-1,1.0,2.0,3.0"]
   let r6 = ["2012.08.24,Dortmund,Bremen,-1,1,1.0,2.0,3.0"]
   let r7 = ["2012.08.24,Dortmund,Bremen,1,-1,-1,-1,-1"]
+  let r8 = ["2012.08.25,Dortmund,Bremen,1,-1,-1,-1,-1"]
   assertEqual "Good input"
     [Match 20120824 "Dortmund" "Bremen" 2 3 1 2 3]
     (readMatches r1)
@@ -38,3 +39,9 @@ test_readMatches = TestCase $ do
   assertEqual "Upcoming match bad2"
     []
     (readMatches r7)
+  assertEqual "Sort matches"
+    (readMatches $ r7++r8)
+    (readMatches $ r8++r7)
+  assertEqual "Sort matches"
+    ((readMatches r7) ++ (readMatches r8))
+    (readMatches $ r8++r7)
