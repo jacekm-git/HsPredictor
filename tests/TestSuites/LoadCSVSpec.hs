@@ -1,16 +1,15 @@
 module TestSuites.LoadCSVSpec (spec) where
 
 --standard
-import Control.Exception (bracket, catch, throwIO, )
-import Prelude hiding (catch)
-import System.Directory (removeFile)
-import System.IO.Error 
+
 --3rd party
 import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
 --own
 import LoadCSV
+import Queries
 import Types
+import HelperFuncs (removeIfExists)
 
 
 spec = fromHUnitTest $ TestList [
@@ -29,12 +28,6 @@ setUp = do
   removeIfExists testDbPath
   loadCSV testFilePath testDbPath
   
-removeIfExists :: FilePath -> IO ()
-removeIfExists fileName = removeFile fileName `catch` handleExists
-  where handleExists e
-          | isDoesNotExistError e = return ()
-          | otherwise = throwIO e
-
 test_stats = TestCase $ do
   setUp
   teams <- getTeams testDbPath
@@ -49,12 +42,12 @@ test_stats = TestCase $ do
 test_teams = TestCase $ do
   setUp
   teams <- getTeams testDbPath
-  assertEqual "Num of teams" (length teams) (3)
+  (length teams) @?= 3
 
 test_resultsAll = TestCase $ do
   setUp
   r <- getResultsAll testDbPath
-  assertEqual "results all" (length r) (14)
+  (length r) @?= 14
 
 test_resultsUpcoming = TestCase $ do
   setUp
