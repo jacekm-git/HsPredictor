@@ -18,6 +18,10 @@ import Database.Persist.Sql (SqlBackend, Filter, SelectOpt (LimitTo),
                              getBy, selectList,
                              runMigrationSilent,toSqlKey,
                              deleteWhere, selectList)
+
+import Control.Exception (bracket, catch, throwIO, )
+import Prelude hiding (catch)
+import System.IO.Error  
 -- own
 import Parser (readMatches)
 import Types (Result (..), Field (..), Match (..))
@@ -86,12 +90,20 @@ action xs hashF dbname = runSqlite (pack dbname) $ do
      bulkInsert xs hashF $ mD5Hash h
   return ()
 
+
+
 getFileContents :: String -> IO String
 getFileContents fname = do
-  csvH <- openFile fname ReadMode
-  !full <- hGetContents csvH
-  hClose csvH
-  return full
+  readF `catch` handleExists
+  where 
+    readF = do
+      csvH <- openFile fname ReadMode
+      !full <- hGetContents csvH
+      hClose csvH
+      return full
+    handleExists e
+      | isDoesNotExistError e = return ""
+      | otherwise = throwIO e
 
 loadCSV :: String -> String -> IO ()
 loadCSV fname  dbname = do

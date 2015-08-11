@@ -17,11 +17,21 @@ import Models
 unVal :: E.Value a -> a
 unVal (E.Value a) = a
 
-headUnVal :: IO [E.Value a] -> IO a
+headUnVal ::  (Num s) => IO [E.Value s] -> IO s
 headUnVal val = do
   v <- val
-  return $ unVal . head $ v
+  case v of
+   [] -> return 0
+   _ -> return $ unVal . head $ v
 
+headUnVal' ::  (Num s) => IO [E.Value (Maybe s)] -> IO s
+headUnVal' val = do
+  v <- val
+  case v of
+   [] -> return 0
+   [E.Value (Just a)] -> return a
+   [E.Value Nothing] -> return 0
+   
 
 getResultsUpcoming, getResultsAll :: String ->IO [(E.Value Int,
                                                  E.Value String,
@@ -81,13 +91,13 @@ getStat dbname team stat = headUnVal $ runSqlite (pack dbname)
                         return $ t1 ^. stat
 
 --getMaxWins :: String -> String -> IO [E.Value Int]
-getMaxStat dbname team stat = headUnVal $ runSqlite (pack dbname)
+getMaxStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
                       $ E.from $ \t -> do
                         return $ E.max_ $ t ^. stat
 
 --getMinWins :: String -> String -> IO [E.Value Int]
-getMinStat dbname team stat = headUnVal $ runSqlite (pack dbname)
+getMinStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
                       $ E.from $ \t -> do
                         return $ E.min_ $ t ^. stat

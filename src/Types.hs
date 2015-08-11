@@ -15,9 +15,19 @@ instance Ord Match where
   m1 `compare` m2 = (dateM m1) `compare` (dateM m2)
                             
 data Result = Win | Draw | Loss | Upcoming
+data Outcome = HomeWin | NoWinner | AwayWin
+
+instance Show Outcome where
+  show HomeWin = "-1"
+  show NoWinner = "0"
+  show AwayWin = "1"
+  
 data Field = Home | Away
 
 data Scaled = Scaled {
   winS :: Double,
   drawS :: Double,
-  loseS :: Double} deriving (Show)
+  loseS :: Double} deriving (Eq)
+
+instance Show Scaled where
+  show (Scaled w d l) = show w ++ " " ++ show d ++ " " ++ show l ++ " "

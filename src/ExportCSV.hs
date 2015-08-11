@@ -1,17 +1,20 @@
+{-# Language BangPatterns #-}
 module ExportCSV where
 
 -- standard
+import System.IO (appendFile)
 import Data.Text (pack)
 -- 3rd party
 import qualified Database.Esqueleto      as E
 import           Database.Esqueleto      ((^.))
 import Database.Persist.Sqlite (runSqlite)
+import Database.Persist.Sql
 -- own
-import LoadCSV (getFileContents, insertMatch, updateTable)
+import LoadCSV (insertMatch, getFileContents)
+import Parser (readMatches)
 import Models
 import Queries
 import Types
-
 
 
 normalize val min max =  x / y - 1
@@ -20,6 +23,12 @@ normalize val min max =  x / y - 1
     y = case max - min of
          0 -> 1 :: Double
          v -> fromIntegral $ v :: Double
+
+outcome :: Int -> Int -> Outcome
+outcome x y
+  | x > y = HomeWin
+  | x < y = AwayWin
+  | otherwise = NoWinner
 
 -- first step -- list must be sorted
 genListsByDate :: [Match] -> [[Match]]
@@ -33,17 +42,22 @@ genListsByDate (x:xs) = [x:(takeWhile compareMatches xs)] ++
 
 -- second step
 -- get scaled stats
-getScaledStats :: String -> IO Scaled
-getScaledStats = undefined
+getScaledStats :: String -> String -> IO Scaled
+getScaledStats dbname team = do
+  w <- getScaledWin dbname team
+  d <- getScaledDraw dbname team
+  l <- getScaledLoss dbname team
+  return $ Scaled w d l
 
-
---getScaledStat :: String -> String -> IO Double
+--getScaledStat ::  String -> String -> IO Double
 getScaledStat stat dbname team = do
   w <- getStat dbname team stat
-  (Just max_w) <- getMaxStat dbname team stat
-  (Just min_w) <- getMinStat dbname team stat
-  return $ normalize w min_w max_w
-
+  max_w <- getMaxStat dbname stat
+  min_w <- getMinStat dbname stat
+  if w < min_w
+    then return $ (-1)
+    else return $ normalize w min_w max_w
+ 
 getScaledWin :: String -> String -> IO Double
 getScaledWin = getScaledStat StatsTableWin
 
@@ -56,9 +70,44 @@ getScaledLoss = getScaledStat StatsTableLoss
 
 -- third step
 -- write to file
-appendToExported :: String -> Scaled -> Scaled -> Double -> IO ()
-appendToExported = undefined
+prepareLine :: String -> String -> String -> Outcome -> IO String
+prepareLine dbpath home away out = do
+  h <- getScaledStats dbpath home
+  a <- getScaledStats dbpath away
+  return $ show h ++ show a ++ "\n" ++ show out ++ "\n"
 
+
+writeExport :: String -> IO String -> IO ()
+writeExport fpath x = do
+  line <- x
+  print line
+  appendFile fpath line
+  
+processRound :: String -> String -> [Match] -> IO ()
+processRound dbPath fpath m = do
+  runSqlite (pack dbPath) $ do
+    runMigrationSilent migrateAll
+  let matches = filter (\x -> ghM x >= 0) m
+  let lines = map prepare matches
+  mapM_ (writeExport fpath) lines
+  insertRound m dbPath
+  where
+    prepare x = let home = homeM x
+                    away = awayM x
+                    out = outcome (ghM x) (gaM x)
+                in prepareLine dbPath home away out
+                   
+
+insertRound :: [Match] -> String -> IO ()
+insertRound xs dbPath = runSqlite (pack dbPath) $ do
+  runMigrationSilent migrateAll
+  mapM_ insertMatch xs
+  
 -- last step
-bulkInsert :: [Match] -> IO ()
-bulkInsert = undefined
+export :: String -> String -> String -> IO ()
+export dbPath expPath csvPath = do
+  ms <- getFileContents csvPath
+  let matches = readMatches $ lines ms
+  let rounds = genListsByDate matches
+  mapM_ (processRound dbPath expPath) rounds
+  return ()
