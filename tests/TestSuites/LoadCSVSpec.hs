@@ -31,10 +31,10 @@ setUp = do
 test_stats = TestCase $ do
   setUp
   teams <- getTeams testDbPath
-  s1 <- filterStats "Blue" teams
-  s2 <- filterStats "Red" teams
-  assertEqual "Blue stats" s1 [4,4,4]
-  assertEqual "Red stats" s2 [2,2,2]
+  s1 <- filterStats "A" teams
+  s2 <- filterStats "B" teams
+  assertEqual "A stats" s1 [4,2,0]
+  assertEqual "B stats" s2 [0,2,4]
   where
     filterStats t teams = flip getStats testDbPath
                           ((filter (\x -> x==t) teams)!!0)
@@ -42,7 +42,7 @@ test_stats = TestCase $ do
 test_teams = TestCase $ do
   setUp
   teams <- getTeams testDbPath
-  (length teams) @?= 3
+  (length teams) @?= 4
 
 test_resultsAll = TestCase $ do
   setUp
@@ -52,7 +52,7 @@ test_resultsAll = TestCase $ do
 test_resultsUpcoming = TestCase $ do
   setUp
   r <- getResultsUpcoming testDbPath
-  assertEqual "result upcomings" (length r) (2)  
+  (length r) @?= 2
   
 test_reloadCSV = TestCase $ do
   setUp
@@ -60,7 +60,7 @@ test_reloadCSV = TestCase $ do
   assertEqual "results all length" (length r) (14)
   loadCSV testFilePath testDbPath -- load again
   r1 <- getResultsAll testDbPath
-  assertEqual "results length after reload" (length r1) (14)
+  (length r1) @?= 14
   assertEqual "results before and after" r r1
 
 test_getFileContents = TestCase $ do

@@ -18,6 +18,7 @@ import Types
 main = hspec $ spec
 
 spec = fromHUnitTest $ TestList [
+  TestLabel ">>getScaledStats" test_getScaledStats,
   TestLabel ">>genListsByDate" test_genListsByDate,
   TestLabel ">>getScaledWin" test_getScaledWin,
   TestLabel ">>getScaledDraw" test_getScaledDraw,
@@ -57,25 +58,33 @@ test_genListsByDate = TestCase $ do
     
 test_getScaledStats = TestCase $ do
   setUp
-  b <- getScaledStats testDbPath "Blue"
-  g <- getScaledStats testDbPath "Blue"
-  r <- getScaledStats testDbPath "Blue"
-  b @?= Scaled 1 1 1
-  g @?= Scaled (-1) (-1) (-1)
-  r @?= Scaled (-1) (-1) (-1)
+  a <- getScaledStats testDbPath "A"
+  b <- getScaledStats testDbPath "B"
+  d <- getScaledStats testDbPath "D"
+  a @?= Scaled 1 (-1) (-1)
+  b @?= Scaled (-1) (-1) 1
+  d @?= Scaled (-0.5) 1 0
 
 test_getScaledWin = TestCase $ do
   setUp
-  winScaled <- getScaledWin testDbPath "Blue"
-  winScaled @?= 1
+  a <- getScaledWin testDbPath "A"
+  d <- getScaledWin testDbPath "D"
+  a @?= 1
+  d @?= (-0.5)
 
 test_getScaledDraw = TestCase $ do
   setUp
-  drawScaled <- getScaledDraw testDbPath "Red"
-  drawScaled @?= (-1)
+  a <- getScaledDraw testDbPath "A"
+  d <- getScaledDraw testDbPath "D"
+  a @?= (-1)
+  d @?= (1)
 
 test_getScaledLoss = TestCase $ do
   setUp
+  a <- getScaledLoss testDbPath "A"
+  d <- getScaledLoss testDbPath "D"
+  a @?= (-1)
+  d @?= 0
   lossScaled <- getScaledLoss testDbPath "Green"
   lossScaled @?= (-1)
 
@@ -90,12 +99,12 @@ test_normalize = TestCase $ do
 
 test_prepareLine = TestCase $ do
   setUp
-  a <- prepareLine testDbPath "Blue" "Green" HomeWin
-  b <- prepareLine testDbPath "Green" "Blue" NoWinner
-  c <- prepareLine testDbPath "Blue" "Green" AwayWin
-  a @?= "1.0 1.0 1.0 -1.0 -1.0 -1.0 \n-1\n"
-  b @?= "-1.0 -1.0 -1.0 1.0 1.0 1.0 \n0\n"
-  c @?= "1.0 1.0 1.0 -1.0 -1.0 -1.0 \n1\n"
+  a <- prepareLine testDbPath "A" "B" HomeWin
+  b <- prepareLine testDbPath "B" "A" NoWinner
+  c <- prepareLine testDbPath "A" "D" AwayWin
+  a @?= "1.0 -1.0 -1.0 -1.0 -1.0 1.0 \n-1\n"
+  b @?= "-1.0 -1.0 1.0 1.0 -1.0 -1.0 \n0\n"
+  c @?= "1.0 -1.0 -1.0 -0.5 1.0 0.0 \n1\n"
 
 test_export = TestCase $ do
   setUpExport
@@ -105,5 +114,4 @@ test_export = TestCase $ do
   length exp_list @?= 24
   exp_list !! 0 @?= "-1.0 -1.0 -1.0 -1.0 -1.0 -1.0 "
   exp_list !! 1 @?= "-1"
-  exp_list !! 22 @?= "-1.0 -1.0 -1.0 1.0 1.0 1.0 "
-  exp_list !! 23 @?= "1"
+

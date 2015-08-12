@@ -80,7 +80,6 @@ prepareLine dbpath home away out = do
 writeExport :: String -> IO String -> IO ()
 writeExport fpath x = do
   line <- x
-  print line
   appendFile fpath line
   
 processRound :: String -> String -> [Match] -> IO ()
