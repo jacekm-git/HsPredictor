@@ -23,7 +23,7 @@ import Control.Exception (bracket, catch, throwIO, )
 import Prelude hiding (catch)
 import System.IO.Error  
 -- own
-import Parser (readMatches)
+import ParserCSV (readMatches)
 import Types (Result (..), Field (..), Match (..))
 import Models
 import HashCSV (genHash, checkHash)

@@ -11,7 +11,7 @@ import Database.Persist.Sqlite (runSqlite)
 import Database.Persist.Sql
 -- own
 import LoadCSV (insertMatch, getFileContents)
-import Parser (readMatches)
+import ParserCSV (readMatches)
 import Models
 import Queries
 import Types

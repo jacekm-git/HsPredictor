@@ -1,8 +1,8 @@
-module TestSuites.ParserSpec (spec) where
+module TestSuites.ParserCSVSpec (spec) where
 
 import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
-import Parser
+import ParserCSV
 import Types
 
 spec = fromHUnitTest $ TestList [

@@ -12,7 +12,7 @@ import Test.HUnit
 import HelperFuncs (removeIfExists)
 import LoadCSV (getFileContents, loadCSV)
 import ExportCSV
-import Parser (readMatches)
+import ParserCSV (readMatches)
 import Types
 
 main = hspec $ spec

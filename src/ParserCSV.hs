@@ -1,4 +1,4 @@
-module Parser where
+module ParserCSV where
 
 -- standard
 import Control.Monad.Error (liftIO, throwError, fail)
