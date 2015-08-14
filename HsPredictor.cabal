@@ -26,6 +26,7 @@ library
                 , LoadCSV
                 , LoadURL
                 , ParserCSV
+                , ParserHTML
                 , HashCSV
                 , ExportCSV
 
@@ -46,7 +47,8 @@ library
               , text >= 1.1 && < 1.2
               , esqueleto >= 2.2 && < 2.3
               , http-conduit >= 2.1 && < 2.2
-
+              , hxt >= 9.3 && < 9.4
+              , HandsomeSoup >= 4.2 && < 4.3
 
 
 test-suite test
