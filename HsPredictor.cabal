@@ -48,7 +48,7 @@ library
               , esqueleto >= 2.2 && < 2.3
               , http-conduit >= 2.1 && < 2.2
               , hxt >= 9.3 && < 9.4
-              , HandsomeSoup >= 4.2 && < 4.3
+              , HandsomeSoup >= 0.4.2 && < 0.4.3
 
 
 test-suite test
