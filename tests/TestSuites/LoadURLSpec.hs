@@ -13,10 +13,6 @@ spec = fromHUnitTest $ TestList [
   TestLabel ">>getBody" test_getBody
   ]
 
-testUrl = "http://www.blank.org"
-
 test_getBody = TestCase $ do
-  b <- getBody testUrl
-  "<title>\nblank\n</title>" `isInfixOf` b @?= True
   b1 <- getBody "wrong url"
-  b1 @?= ""
+  b1 @?= "wrong url or no connection"

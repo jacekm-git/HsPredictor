@@ -13,4 +13,4 @@ getBody url = do
   return $ unpack x
   where
     handleError :: HttpException -> IO ByteString
-    handleError e = return $ pack ""
+    handleError e = return $ pack "wrong url or no connection"
