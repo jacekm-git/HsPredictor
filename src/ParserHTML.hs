@@ -17,12 +17,12 @@ strip' :: String -> String
 strip' s = unpack . strip . pack $ s
 -- Html
 fromResultsHTML :: ArrowXml a => a XmlTree XmlTree -> a XmlTree [String]
-fromResultsHTML doc = doc //> hasName "tr" >>>
+fromResultsHTML doc = doc //> css "table tr" >>>
                listA (date <+> teamsOrResult <+> odds)
   where
-    odds = css "td" >>> getAttrValue "data-odd"
-    teamsOrResult = css "td" >>> getChildren >>> getChildren >>>getText
-    date = getChildren >>> getChildren >>> getText
+    odds = css ".odds" >>> getAttrValue "data-odd"
+    teamsOrResult = css "td a" /> getText
+    date = css ".date" /> getText
 
 fromFixturesHTML :: ArrowXml a => a XmlTree XmlTree -> a XmlTree [String]
 fromFixturesHTML doc = doc //> css "tr.match-line" >>>
@@ -33,13 +33,18 @@ fromFixturesHTML doc = doc //> css "tr.match-line" >>>
     odds =  css ".mySelectionsTip" >>> getAttrValue "data-odd"
 
 type ConvertFunction = ArrowXml a => a XmlTree XmlTree -> a XmlTree [String]
-convertHtml :: String -> ConvertFunction -> IO [String]
-convertHtml path func = do
+convertHtmlFile :: String -> ConvertFunction -> IO [String]
+convertHtmlFile path func = do
   html <- readFile path
-  m <- runX $ func $ readString [withParseHTML yes, withWarnings no] html
-  return $ fillHoles
-    (map (intercalate ", " . filter (\x -> x/="\160" && x/="")) $  m) ""
+  convertHtmlString html func
 
+convertHtmlString :: String -> ConvertFunction -> IO [String]
+convertHtmlString str func = do
+  m <- runX $ func $ readString [withParseHTML yes, withWarnings no] str
+  return $ fillHoles (clean m) ""
+  where clean xs =  filter (/= "") $
+                    map (intercalate ", " . filter (\x -> x/="\16")) $ xs
+    
 -- adds dates to all matches (in fixtures some matches doesnt have date)
 fillHoles :: [String] -> String -> [String]
 fillHoles [] _ = []
