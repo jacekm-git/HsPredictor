@@ -12,7 +12,7 @@ data Match = Match {
   odds2M :: Double} deriving (Show, Eq)
 
 instance Ord Match where
-  m1 `compare` m2 = (dateM m1) `compare` (dateM m2)
+  m1 `compare` m2 = dateM m1 `compare` dateM m2
                             
 data Result = Win | Draw | Loss | Upcoming
 data Outcome = HomeWin | NoWinner | AwayWin

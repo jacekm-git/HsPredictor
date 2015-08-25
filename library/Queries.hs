@@ -74,7 +74,7 @@ getStats team dbname = runSqlite (pack dbname) $ do
   teamId <- selectList [TeamsName ==. team] [LimitTo 1]
   case teamId of
    [] -> return []
-   (x:[]) -> do
+   [x] -> do
      stats <- selectList [StatsTableTeam ==. entityKey x] [LimitTo 1]
      return [getStat statsTableWin stats ,
              getStat statsTableDraw stats,
@@ -93,11 +93,9 @@ getStat dbname team stat = headUnVal $ runSqlite (pack dbname)
 --getMaxWins :: String -> String -> IO [E.Value Int]
 getMaxStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
-                      $ E.from $ \t -> do
-                        return $ E.max_ $ t ^. stat
+                      $ E.from $ \t -> return $ E.max_ $ t ^. stat
 
 --getMinWins :: String -> String -> IO [E.Value Int]
 getMinStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
-                      $ E.from $ \t -> do
-                        return $ E.min_ $ t ^. stat
+                      $ E.from $ \t -> return $ E.min_ $ t ^. stat

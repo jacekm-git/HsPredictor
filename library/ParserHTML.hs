@@ -43,7 +43,7 @@ convertHtmlString str func = do
   m <- runX $ func $ readString [withParseHTML yes, withWarnings no] str
   return $ fillHoles (clean m) ""
   where clean xs =  filter (/= "") $
-                    map (intercalate ", " . filter (\x -> x/="\16")) $ xs
+                    map (intercalate ", " . filter (/="\16")) xs
     
 -- adds dates to all matches (in fixtures some matches doesnt have date)
 fillHoles :: [String] -> String -> [String]
@@ -55,7 +55,7 @@ fillHoles (x:xs) d = if all isDigit $ take 2 x
 
 -- Parsers
 --readMatch :: String -> String
-readMatch inp = parse (try parseHTMLResults <|> parseHTMLFixtures) "" inp
+readMatch = parse (try parseHTMLResults <|> parseHTMLFixtures) ""
 
 readMatches :: [String] ->  [String]
 readMatches = sort . foldr (\x acc -> case readMatch x of
@@ -119,9 +119,9 @@ parseOdds = do
   return (odd1,oddx,odd2)
   where
     odds = do
-      many (space)
+      many space
       int <- many digit
       dot <- char '.'
       rest <- many digit
       let odd = int ++ [dot] ++ rest
-      return $ odd
+      return odd

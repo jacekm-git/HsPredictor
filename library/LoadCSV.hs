@@ -93,8 +93,7 @@ action xs hashF dbname = runSqlite (pack dbname) $ do
 
 
 getFileContents :: String -> IO String
-getFileContents fname = do
-  readF `catch` handleExists
+getFileContents fname = readF `catch` handleExists
   where 
     readF = do
       csvH <- openFile fname ReadMode

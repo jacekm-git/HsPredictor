@@ -1,4 +1,3 @@
-{-# Language BangPatterns #-}
 module ExportCSV where
 
 -- standard
@@ -22,7 +21,7 @@ normalize val min max =  x / y - 1
     x = fromIntegral $ 2*(val - min) :: Double
     y = case max - min of
          0 -> 1 :: Double
-         v -> fromIntegral $ v :: Double
+         v -> fromIntegral v :: Double
 
 outcome :: Int -> Int -> Outcome
 outcome x y
@@ -33,8 +32,8 @@ outcome x y
 -- first step -- list must be sorted
 genListsByDate :: [Match] -> [[Match]]
 genListsByDate [] = []
-genListsByDate (x:xs) = [x:(takeWhile compareMatches xs)] ++
-                        (genListsByDate $ dropWhile compareMatches xs)
+genListsByDate (x:xs) = (x:takeWhile compareMatches xs):
+                        genListsByDate (dropWhile compareMatches xs)
   where
     compareMatches y = case x `compare` y of
                       EQ -> True
@@ -55,7 +54,7 @@ getScaledStat stat dbname team = do
   max_w <- getMaxStat dbname stat
   min_w <- getMinStat dbname stat
   if w < min_w
-    then return $ (-1)
+    then return (-1)
     else return $ normalize w min_w max_w
  
 getScaledWin :: String -> String -> IO Double
@@ -84,8 +83,7 @@ writeExport fpath x = do
   
 processRound :: String -> String -> [Match] -> IO ()
 processRound dbPath fpath m = do
-  runSqlite (pack dbPath) $ do
-    runMigrationSilent migrateAll
+  runSqlite (pack dbPath) $ runMigrationSilent migrateAll
   let matches = filter (\x -> ghM x >= 0) m
   let lines = map prepare matches
   mapM_ (writeExport fpath) lines
