@@ -1,11 +1,10 @@
 language: haskell
 ghc: 7.8
 cache:
-  apt: true
   directories:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
 install:
-- apt-get install happy
+- cabal install happy-1.19.4
 - cabal sandbox init
 - cabal install --only-dependencies --enable-tests
 before_script:  
