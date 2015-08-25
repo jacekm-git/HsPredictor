@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE FlexibleContexts          #-}
 {-# LANGUAGE BangPatterns          #-}
-module LoadCSV where
+module HsPredictor.LoadCSV where
 -- standard
 import System.IO (openFile, hGetContents,
                   hClose, IOMode(ReadMode))
@@ -23,11 +23,11 @@ import Control.Exception (bracket, catch, throwIO, )
 import Prelude hiding (catch)
 import System.IO.Error  
 -- own
-import ParserCSV (readMatches)
-import Types (Result (..), Field (..), Match (..))
-import Models
-import HashCSV (genHash, checkHash)
-import Queries
+import HsPredictor.ParserCSV (readMatches)
+import HsPredictor.Types (Result (..), Field (..), Match (..))
+import HsPredictor.Models
+import HsPredictor.HashCSV (genHash, checkHash)
+import HsPredictor.Queries
 
 insertMatch :: Match -> SqlPersistM ()
 insertMatch (Match {dateM=d,homeM=ht,awayM=at,ghM=gh,gaM=ga,

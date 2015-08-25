@@ -5,7 +5,7 @@
 {-# LANGUAGE QuasiQuotes                #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
-module Models where
+module HsPredictor.Models where
 
 -- 3rd party
 import Database.Persist.TH (share, mkPersist, sqlSettings,

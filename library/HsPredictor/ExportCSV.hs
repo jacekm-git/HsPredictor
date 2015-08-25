@@ -1,4 +1,4 @@
-module ExportCSV where
+module HsPredictor.ExportCSV where
 
 -- standard
 import System.IO (appendFile)
@@ -9,11 +9,11 @@ import           Database.Esqueleto      ((^.))
 import Database.Persist.Sqlite (runSqlite)
 import Database.Persist.Sql
 -- own
-import LoadCSV (insertMatch, getFileContents)
-import ParserCSV (readMatches)
-import Models
-import Queries
-import Types
+import HsPredictor.LoadCSV (insertMatch, getFileContents)
+import HsPredictor.ParserCSV (readMatches)
+import HsPredictor.Models
+import HsPredictor.Queries
+import HsPredictor.Types
 
 
 normalize val min max =  x / y - 1

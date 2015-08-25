@@ -2,7 +2,7 @@ module TestSuites.HashCSVSpec (spec) where
 
 import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
-import HashCSV
+import HsPredictor.HashCSV
 
 spec = fromHUnitTest $ TestList [
   TestLabel ">>genHash" test_genHash

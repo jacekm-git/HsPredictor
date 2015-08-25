@@ -1,4 +1,4 @@
-module ParserCSV where
+module HsPredictor.ParserCSV where
 
 -- standard
 import Control.Monad.Error (liftIO, throwError, fail)
@@ -9,7 +9,7 @@ import Text.ParserCombinators.Parsec (parse, Parser, many,
                                       digit, noneOf, char,
                                       count, eof, (<|>), try)
 -- own
-import Types (Match (..), ThrowsError)
+import HsPredictor.Types (Match (..), ThrowsError)
 
 
 readMatch :: String -> ThrowsError Match

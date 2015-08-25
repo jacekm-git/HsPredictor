@@ -1,4 +1,4 @@
-module HashCSV where
+module HsPredictor.HashCSV where
 
 -- standard
 import Data.ByteString.Lazy.Char8 (pack)

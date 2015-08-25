@@ -4,7 +4,7 @@ import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.Hspec (hspec)
 import Test.HUnit
 --own
-import ParserHTML
+import HsPredictor.ParserHTML
 
 main = hspec spec
 

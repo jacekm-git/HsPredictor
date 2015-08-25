@@ -6,9 +6,9 @@ module TestSuites.LoadCSVSpec (spec) where
 import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
 --own
-import LoadCSV
-import Queries
-import Types
+import HsPredictor.LoadCSV
+import HsPredictor.Queries
+import HsPredictor.Types
 import HelperFuncs (removeIfExists)
 
 

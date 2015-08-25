@@ -1,4 +1,4 @@
-module Types where
+module HsPredictor.Types where
 
 type ThrowsError = Either String
 data Match = Match {

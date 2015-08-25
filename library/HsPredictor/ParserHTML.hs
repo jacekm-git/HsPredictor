@@ -1,5 +1,5 @@
 {-# Language RankNTypes #-}
-module ParserHTML where
+module HsPredictor.ParserHTML where
 import Data.List (intercalate, sort)
 import Data.Char(isDigit)
 import Data.Text (strip, pack, unpack)

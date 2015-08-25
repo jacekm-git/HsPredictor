@@ -1,4 +1,4 @@
-module Queries where
+module HsPredictor.Queries where
 
 --standard
 import Data.Text (pack)
@@ -10,7 +10,7 @@ import Database.Persist.Sql (Filter, SelectOpt (LimitTo),
                              Entity(..), Key(..),
                              (>.), (==.), selectList,toSqlKey)
 --own
-import Models
+import HsPredictor.Models
 
 
 -- unpack from Esquelto Value

@@ -22,15 +22,15 @@ library
   other-extensions:    GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses, OverloadedStrings, QuasiQuotes, TemplateHaskell, TypeFamilies, FlexibleContexts
   hs-source-dirs:   library
   exposed-modules:
-                  Types
-                , Models
-                , Queries
-                , LoadCSV
-                , LoadURL
-                , ParserCSV
-                , ParserHTML
-                , HashCSV
-                , ExportCSV
+                  HsPredictor.Types
+                , HsPredictor.Models
+                , HsPredictor.Queries
+                , HsPredictor.LoadCSV
+                , HsPredictor.LoadURL
+                , HsPredictor.ParserCSV
+                , HsPredictor.ParserHTML
+                , HsPredictor.HashCSV
+                , HsPredictor.ExportCSV
 
   build-depends:
                 base ==4.7.*

@@ -10,10 +10,10 @@ import Test.Hspec (hspec)
 import Test.HUnit
 -- own
 import HelperFuncs (removeIfExists)
-import LoadCSV (getFileContents, loadCSV)
-import ExportCSV
-import ParserCSV (readMatches)
-import Types
+import HsPredictor.LoadCSV (getFileContents, loadCSV)
+import HsPredictor.ExportCSV
+import HsPredictor.ParserCSV (readMatches)
+import HsPredictor.Types
 
 main = hspec $ spec
 
