@@ -1,22 +1,22 @@
 module HsPredictor.Queries where
 
 --standard
-import Data.Text (pack)
+import           Data.Text               (pack)
 --3rd party
-import qualified Database.Esqueleto      as E
 import           Database.Esqueleto      ((^.))
-import Database.Persist.Sqlite (runSqlite)
-import Database.Persist.Sql (Filter, SelectOpt (LimitTo),
-                             Entity(..), Key(..),
-                             (>.), (==.), selectList,toSqlKey)
+import qualified Database.Esqueleto      as E
+import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
+                                          SelectOpt (LimitTo), selectList,
+                                          toSqlKey, (==.), (>.))
+import           Database.Persist.Sqlite (runSqlite)
 --own
-import HsPredictor.Models
+import           HsPredictor.Models
 
-
--- unpack from Esquelto Value
+-- | Unpack from Esqueleto Value
 unVal :: E.Value a -> a
 unVal (E.Value a) = a
 
+-- | Unpack head from Esquelto Value list.
 headUnVal ::  (Num s) => IO [E.Value s] -> IO s
 headUnVal val = do
   v <- val
@@ -24,6 +24,8 @@ headUnVal val = do
    [] -> return 0
    _ -> return $ unVal . head $ v
 
+
+-- | Unpack head from Esqueleto Value (Maybe a) list
 headUnVal' ::  (Num s) => IO [E.Value (Maybe s)] -> IO s
 headUnVal' val = do
   v <- val
@@ -31,13 +33,14 @@ headUnVal' val = do
    [] -> return 0
    [E.Value (Just a)] -> return a
    [E.Value Nothing] -> return 0
-   
+
 
 getResultsUpcoming, getResultsAll :: String ->IO [(E.Value Int,
                                                  E.Value String,
                                                  E.Value String,
                                                  E.Value Int,
                                                  E.Value Int)]
+-- ^ Return all results form database
 getResultsAll dbname = runSqlite (pack dbname)
               $ E.select
               $ E.from $ \(t1 `E.InnerJoin` r `E.InnerJoin` t2) -> do
@@ -49,8 +52,8 @@ getResultsAll dbname = runSqlite (pack dbname)
                   t2 ^. TeamsName,
                   r ^. ResultsResultHome,
                   r ^. ResultsResultAway)
-                  
 
+-- ^ Return upcoming matches from database.
 getResultsUpcoming dbname = runSqlite (pack dbname)
               $ E.select
               $ E.from $ \(t1 `E.InnerJoin` r `E.InnerJoin` t2) -> do
@@ -64,11 +67,14 @@ getResultsUpcoming dbname = runSqlite (pack dbname)
                   r ^. ResultsResultHome,
                   r ^. ResultsResultAway)
 
+-- | Return list of teams
 getTeams :: String -> IO [String]
 getTeams dbname = runSqlite (pack dbname) $ do
   teams <- selectList ([] :: [Filter Teams]) []
   return $ map (\x -> teamsName . entityVal $ x) teams
 
+
+-- | Return stats of given team
 getStats :: String -> String -> IO [Int]
 getStats team dbname = runSqlite (pack dbname) $ do
   teamId <- selectList [TeamsName ==. team] [LimitTo 1]
@@ -80,9 +86,14 @@ getStats team dbname = runSqlite (pack dbname) $ do
              getStat statsTableDraw stats,
              getStat statsTableLoss stats]
      where
-       getStat f = f . entityVal . head                  
+       getStat f = f . entityVal . head
 
---getStat :: String -> String -> IO Int
+-- | Return given stat of a given team
+getStat :: (E.PersistField a, Num a) =>
+           String -- ^path to Database
+           -> String -- ^team name
+           -> EntityField StatsTable a -- ^ StatsTable column
+           -> IO a
 getStat dbname team stat = headUnVal $ runSqlite (pack dbname)
                       $ E.select
                       $ E.from $ \(t1 `E.InnerJoin` t2) -> do
@@ -90,12 +101,21 @@ getStat dbname team stat = headUnVal $ runSqlite (pack dbname)
                         E.where_ (t2 ^. TeamsName E.==. E.val team)
                         return $ t1 ^. stat
 
---getMaxWins :: String -> String -> IO [E.Value Int]
+-- | Return max value of given stat
+getMaxStat :: (E.PersistField a, Num a) =>
+              String -- ^ path to Database
+              -> EntityField StatsTable a -- ^ StatsTable column
+              -> IO a
 getMaxStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
                       $ E.from $ \t -> return $ E.max_ $ t ^. stat
 
---getMinWins :: String -> String -> IO [E.Value Int]
+
+-- | Return min value of given stat
+getMinStat :: (E.PersistField a, Num a) =>
+              String -- ^ path to Database
+              -> EntityField StatsTable a -- ^ StatsTable column
+              -> IO a
 getMinStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
                       $ E.from $ \t -> return $ E.min_ $ t ^. stat

@@ -1,27 +1,28 @@
 module HsPredictor.ParserCSV where
 
 -- standard
-import Control.Monad.Error (liftIO, throwError, fail)
-import Control.Monad (replicateM)
-import Data.List (sort)
+import           Control.Monad                 (replicateM)
+import           Control.Monad.Error           (fail, liftIO, throwError)
+import           Data.List                     (sort)
 -- 3rd party
-import Text.ParserCombinators.Parsec (parse, Parser, many,
-                                      digit, noneOf, char,
-                                      count, eof, (<|>), try)
+import           Text.ParserCombinators.Parsec (Parser, char, count, digit, eof,
+                                                many, noneOf, parse, try, (<|>))
 -- own
-import HsPredictor.Types (Match (..), ThrowsError)
+import           HsPredictor.Types             (Match (..), ThrowsError)
 
-
+-- | Parse one line from csv file.
 readMatch :: String -> ThrowsError Match
 readMatch input = case parse parseCsv "csv" input of
   Left err -> throwError $ show err
   Right val -> return val
 
+-- | Parse list of lines from csv file. Return sorted matches list.
 readMatches :: [String] ->  [Match]
 readMatches = sort . foldr (\x acc -> case readMatch x of
                                    Left _ -> acc
                                    Right m -> m:acc) []
 
+-- | Parser for csv file.
 parseCsv :: Parser Match
 parseCsv = do
   date <- parseDate
@@ -32,7 +33,7 @@ parseCsv = do
   eof
   return $ Match date homeT awayT goalsH goalsA odd1 oddx odd2
 
--- Parsers for parseCSV  
+-- | Parser for date.
 parseDate :: Parser Int
 parseDate = do
   year <- replicateM 4 digit
@@ -43,12 +44,15 @@ parseDate = do
   char ','
   return $ read (year++month++day)
 
+-- | Parser for team.
 parseTeam :: Parser String
 parseTeam = do
   team <- many (noneOf ",")
   char ','
   return team
 
+
+-- | Parser for goals.
 parseGoals :: Parser (Int, Int)
 parseGoals = do
   goalsH <- minusOne <|> many digit
@@ -57,6 +61,7 @@ parseGoals = do
   char ','
   return (read goalsH :: Int, read goalsA :: Int)
 
+-- | Parser for bookie odds.
 parseOdds :: Parser (Double, Double, Double)
 parseOdds = do
   odd1 <- minusOne <|> odds
@@ -68,12 +73,14 @@ parseOdds = do
           read oddx :: Double,
           read odd2 :: Double)
 
+-- | Parser for "-1"
 minusOne :: Parser String
 minusOne = do
   sign <- char '-'
   one <- char '1'
   return [sign, one]
 
+-- | Parse one odds value.
 odds :: Parser String
 odds = do
   int <- many digit
@@ -81,6 +88,7 @@ odds = do
   rest <- many digit
   return $ int ++ [dot] ++ rest
 
+-- | Check for "-1" field
 checkField :: String -> Parser String -> Parser String
 checkField field p = if field == "-1"
                      then minusOne

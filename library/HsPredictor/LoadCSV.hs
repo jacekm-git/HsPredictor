@@ -1,34 +1,33 @@
-{-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE FlexibleContexts          #-}
-{-# LANGUAGE BangPatterns          #-}
+{-# LANGUAGE BangPatterns      #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedStrings #-}
 module HsPredictor.LoadCSV where
 -- standard
-import System.IO (openFile, hGetContents,
-                  hClose, IOMode(ReadMode))
-import Data.Text (pack)
-import Control.Monad.Error (liftIO)
-import Control.Monad (when)
+import           Control.Exception       (bracket, catch, throwIO)
+import           Control.Monad           (when)
+import           Control.Monad.Error     (liftIO)
+import           Data.Text               (pack)
+import           Prelude                 hiding (catch)
+import           System.IO               (IOMode (ReadMode), hClose,
+                                          hGetContents, openFile)
+import           System.IO.Error
 -- 3rd party
-import Database.Persist.Sqlite (runSqlite)
-import Database.Persist.Sql (SqlBackend, Filter, SelectOpt (LimitTo),
-                             SqlPersistM, Entity(..), Key(..),
-                             insertBy, runMigration,get,
-                             entityKey, insert, update,
-                             (+=.), (=.), (>.), (==.),
-                             getBy, selectList,
-                             runMigrationSilent,toSqlKey,
-                             deleteWhere, selectList)
-
-import Control.Exception (bracket, catch, throwIO, )
-import Prelude hiding (catch)
-import System.IO.Error  
+import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
+                                          SelectOpt (LimitTo), SqlBackend,
+                                          SqlPersistM, deleteWhere, entityKey,
+                                          get, getBy, insert, insertBy,
+                                          runMigration, runMigrationSilent,
+                                          selectList, selectList, toSqlKey,
+                                          update, (+=.), (=.), (==.), (>.))
+import           Database.Persist.Sqlite (runSqlite)
 -- own
-import HsPredictor.ParserCSV (readMatches)
-import HsPredictor.Types (Result (..), Field (..), Match (..))
-import HsPredictor.Models
-import HsPredictor.HashCSV (genHash, checkHash)
-import HsPredictor.Queries
+import           HsPredictor.HashCSV     (checkHash, genHash)
+import           HsPredictor.Models
+import           HsPredictor.ParserCSV   (readMatches)
+import           HsPredictor.Queries
+import           HsPredictor.Types       (Field (..), Match (..), Result (..))
 
+-- | Inserts match to database
 insertMatch :: Match -> SqlPersistM ()
 insertMatch (Match {dateM=d,homeM=ht,awayM=at,ghM=gh,gaM=ga,
                     odds1M=o1,oddsxM=ox,odds2M=o2}) = do
@@ -38,11 +37,13 @@ insertMatch (Match {dateM=d,homeM=ht,awayM=at,ghM=gh,gaM=ga,
   updateTable idHome $ getResult Home gh ga
   updateTable idAway $ getResult Away gh ga
 
+-- | Return sql key for a given team name
 getKeyTeams :: String -> SqlPersistM (Key Teams)
 getKeyTeams team = do
   eitherKey <- insertBy $ Teams team
   return $ keyFromEither eitherKey
 
+-- | Return result of match
 getResult :: Field -> Int -> Int -> Result
 getResult Home rh ra
   | rh == (-1) = Upcoming
@@ -54,7 +55,8 @@ getResult Away rh ra
   | rh == ra = Draw
   | rh > ra = Loss
   | otherwise = Win
-                
+
+-- | Update team statistics
 updateTable :: Key Teams -> Result -> SqlPersistM ()
 updateTable team result = do
   eitherKey <- insertBy $ StatsTable team 0 0 0
@@ -65,10 +67,13 @@ updateTable team result = do
    Loss -> update teamId [StatsTableLoss +=. 1]
    Upcoming -> return ()
 
+-- | Return sql key form Either
 keyFromEither :: Either (Entity record) (Key record) -> Key record
 keyFromEither (Left ent) = entityKey ent
 keyFromEither (Right key) = key
 
+-- | Insert matches into database. Only if csv was updated.
+-- | checkHash prevents from processing the same file twice.
 bulkInsert :: [Match] -> String -> String -> SqlPersistM ()
 bulkInsert xs hashF hashDB =
   when (checkHash hashF hashDB) $ do
@@ -76,8 +81,12 @@ bulkInsert xs hashF hashDB =
     deleteWhere ([] :: [Filter StatsTable])
     deleteWhere ([] :: [Filter Teams])
     mapM_ insertMatch xs
-    
-action :: [Match] -> String -> String -> IO ()
+
+-- | Main function for processing matches and inserting into database.
+action :: [Match] -- ^ list of matches
+          -> String -- ^ hash of csv file
+          -> String -- ^ path to database
+          -> IO ()
 action xs hashF dbname = runSqlite (pack dbname) $ do
   runMigrationSilent migrateAll
   isHashDB <- get (toSqlKey 1 :: MD5Id)
@@ -90,11 +99,10 @@ action xs hashF dbname = runSqlite (pack dbname) $ do
      bulkInsert xs hashF $ mD5Hash h
   return ()
 
-
-
+-- | Return file contents
 getFileContents :: String -> IO String
 getFileContents fname = readF `catch` handleExists
-  where 
+  where
     readF = do
       csvH <- openFile fname ReadMode
       !full <- hGetContents csvH
@@ -104,13 +112,10 @@ getFileContents fname = readF `catch` handleExists
       | isDoesNotExistError e = return ""
       | otherwise = throwIO e
 
+-- | Load csv into database
 loadCSV :: String -> String -> IO ()
 loadCSV fname  dbname = do
   full <- getFileContents fname
   hash <- genHash full
   let matches = readMatches $ lines full
   action matches hash dbname
-
-
-
-

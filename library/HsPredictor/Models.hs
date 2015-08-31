@@ -8,9 +8,9 @@
 module HsPredictor.Models where
 
 -- 3rd party
-import Database.Persist.TH (share, mkPersist, sqlSettings,
-                            mkMigrate, persistLowerCase)
-
+import           Database.Persist.TH (mkMigrate, mkPersist, persistLowerCase,
+                                      share, sqlSettings)
+-- | Template haskell: database model.
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Teams
   name String

@@ -1,36 +1,45 @@
 module HsPredictor.ExportCSV where
 
 -- standard
-import System.IO (appendFile)
-import Data.Text (pack)
+import           Data.Text               (pack)
+import           System.IO               (appendFile)
 -- 3rd party
-import qualified Database.Esqueleto      as E
 import           Database.Esqueleto      ((^.))
-import Database.Persist.Sqlite (runSqlite)
-import Database.Persist.Sql
+import qualified Database.Esqueleto      as E
+import           Database.Persist.Sql
+import           Database.Persist.Sqlite (runSqlite)
 -- own
-import HsPredictor.LoadCSV (insertMatch, getFileContents)
-import HsPredictor.ParserCSV (readMatches)
-import HsPredictor.Models
-import HsPredictor.Queries
-import HsPredictor.Types
+import           HsPredictor.LoadCSV     (getFileContents, insertMatch)
+import           HsPredictor.Models
+import           HsPredictor.ParserCSV   (readMatches)
+import           HsPredictor.Queries
+import           HsPredictor.Types
 
-
+{-| Scale value to range [-1,1] -}
+normalize :: Int -- ^ current value
+          -> Int -- ^ min value
+          -> Int -- ^ max value
+          -> Double
 normalize val min max =  x / y - 1
   where
     x = fromIntegral $ 2*(val - min) :: Double
     y = case max - min of
          0 -> 1 :: Double
          v -> fromIntegral v :: Double
-
-outcome :: Int -> Int -> Outcome
+-- | Based on goals scored by each team return outcome of match
+outcome :: Int -- ^ goals scored by home team
+        -> Int -- ^ goals scored by away team
+        -> Outcome
 outcome x y
   | x > y = HomeWin
   | x < y = AwayWin
   | otherwise = NoWinner
 
--- first step -- list must be sorted
-genListsByDate :: [Match] -> [[Match]]
+{-| Split list of matches by date.
+Group matches with the same date in a separate lists.
+-}
+genListsByDate :: [Match] -- ^ list of matches (must be sorted)
+               -> [[Match]] -- ^ matches grouped by date
 genListsByDate [] = []
 genListsByDate (x:xs) = (x:takeWhile compareMatches xs):
                         genListsByDate (dropWhile compareMatches xs)
@@ -39,16 +48,22 @@ genListsByDate (x:xs) = (x:takeWhile compareMatches xs):
                       EQ -> True
                       otherwise -> False
 
--- second step
--- get scaled stats
-getScaledStats :: String -> String -> IO Scaled
+
+{-| Return team stats, every stat value scaled to range [-1,1] -}
+getScaledStats :: String -- ^ name of database file
+               -> String -- ^ name of a team
+               -> IO Scaled
 getScaledStats dbname team = do
   w <- getScaledWin dbname team
   d <- getScaledDraw dbname team
   l <- getScaledLoss dbname team
   return $ Scaled w d l
 
---getScaledStat ::  String -> String -> IO Double
+{-| Return given stat scaled to [-1,1] -}
+getScaledStat :: EntityField StatsTable Int  -- ^ StatsTable column
+              -> String -- ^ database name
+              -> String -- ^ team name
+              -> IO Double
 getScaledStat stat dbname team = do
   w <- getStat dbname team stat
   max_w <- getMaxStat dbname stat
@@ -56,7 +71,7 @@ getScaledStat stat dbname team = do
   if w < min_w
     then return (-1)
     else return $ normalize w min_w max_w
- 
+
 getScaledWin :: String -> String -> IO Double
 getScaledWin = getScaledStat StatsTableWin
 
@@ -67,21 +82,31 @@ getScaledLoss :: String -> String -> IO Double
 getScaledLoss = getScaledStat StatsTableLoss
 
 
--- third step
--- write to file
-prepareLine :: String -> String -> String -> Outcome -> IO String
+{-| Returns line ready to write to export file -}
+prepareLine :: String -- ^ path to Database
+            -> String -- ^ home team name
+            -> String -- ^ away team name
+            -> Outcome -> IO String
 prepareLine dbpath home away out = do
   h <- getScaledStats dbpath home
   a <- getScaledStats dbpath away
   return $ show h ++ show a ++ "\n" ++ show out ++ "\n"
 
 
-writeExport :: String -> IO String -> IO ()
+{-| Writes line to export file -}
+writeExport :: String -- ^ path to export file
+            -> IO String -- ^ prepared line
+            -> IO ()
 writeExport fpath x = do
   line <- x
   appendFile fpath line
-  
-processRound :: String -> String -> [Match] -> IO ()
+
+
+{-| Insert matches to database. Write data to export file -}
+processRound :: String -- ^ path to database
+             -> String -- ^ path to export file
+             -> [Match] -- ^ list of matches with the same date
+             -> IO ()
 processRound dbPath fpath m = do
   runSqlite (pack dbPath) $ runMigrationSilent migrateAll
   let matches = filter (\x -> ghM x >= 0) m
@@ -93,15 +118,20 @@ processRound dbPath fpath m = do
                     away = awayM x
                     out = outcome (ghM x) (gaM x)
                 in prepareLine dbPath home away out
-                   
 
+
+{-| Insert matches to db -}
 insertRound :: [Match] -> String -> IO ()
 insertRound xs dbPath = runSqlite (pack dbPath) $ do
   runMigrationSilent migrateAll
   mapM_ insertMatch xs
-  
--- last step
-export :: String -> String -> String -> IO ()
+
+
+{-| Insert CSV file to database and write data to export file -}
+export :: String -- ^ path to database
+       -> String -- ^ path to export file
+       -> String -- ^ path to csv file
+       -> IO ()
 export dbPath expPath csvPath = do
   ms <- getFileContents csvPath
   let matches = readMatches $ lines ms
