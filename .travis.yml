@@ -5,17 +5,18 @@ cache:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
     - $TRAVIS_BUILD_DIR/.other_dependancies_sandbox
 install:
+- cabal install happy
 - cabal sandbox init
 - cabal install --only-dependencies --enable-tests
 - cd .other_dependancies_sandbox
-- cabal install happy-1.19.4
+- cabal sandbox init
 - cabal install hpc-coveralls
 - cd ..
-- export PATH=$PATH:$TRAVIS_BUILD_DIR/.other_dependancies_sandbox/bin
+- export PATH=$PATH:$TRAVIS_BUILD_DIR/.other_dependancies_sandbox/.cabal-sandbox/bin
 before_script:
-- cabal configure --enable-tests --enable-coverage
+- cabal configure --enable-tests --enable-library-coverage
 - cabal build
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
-- hpc-coveralls --exclude-dir=tests hunit
+- hpc-coveralls --exclude-dir=tests HUnit
