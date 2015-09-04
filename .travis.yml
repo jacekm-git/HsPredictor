@@ -7,6 +7,7 @@ cache:
 install:
 - cabal install happy
 - cabal sandbox init
+- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$TRAVIS_BUILD_DIR/fann_library/
 - cabal install --only-dependencies --enable-tests
 - cd .other_dependancies_sandbox
 - cabal sandbox init

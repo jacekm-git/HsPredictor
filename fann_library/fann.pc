@@ -1,0 +1,8 @@
+libdir=$TRAVIS_BUILD_DIR/fann_library/lib
+includedir=$TRAVIS_BUILD_DIR/fann_library/include
+
+Name: fann
+Description: Fast Artificial Neural Network Library
+Version: 2.0.0
+Libs: -L${libdir} -lm -lfann
+Cflags: -I${includedir}
