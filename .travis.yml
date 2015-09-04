@@ -4,11 +4,14 @@ cache:
   directories:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
 install:
-- cabal install happy-1.19.4
 - cabal sandbox init
 - cabal install --only-dependencies --enable-tests
-before_script:  
-- cabal configure --enable-tests
+- cabal install happy-1.19.4
+- cabal install hpc-coveralls
+before_script:
+- cabal configure --enable-tests --enable-coverage
 - cabal build
-script:  
+script:
 - cabal test --show-details=always --test-options="--color"
+after_script:
+  - .cabal-sandbox/bin/hpc-coveralls --exclude-dir=tests hunit

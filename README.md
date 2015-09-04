@@ -1,3 +1,3 @@
 [![Build Status](https://travis-ci.org/jacekm-git/HsPredictor.svg)](https://travis-ci.org/jacekm-git/HsPredictor)
-Trying to port BetBoy to Haskell.
-Not much at the moment.
+[![Stories in Ready](https://badge.waffle.io/jacekm-git/HsPredictor.svg?label=ready&title=Ready)](http://waffle.io/jacekm-git/HsPredictor)
+[![Coverage Status](https://coveralls.io/repos/jacekm-git/HsPredictor/badge.svg?branch=master&service=github)](https://coveralls.io/github/jacekm-git/HsPredictor?branch=master)
