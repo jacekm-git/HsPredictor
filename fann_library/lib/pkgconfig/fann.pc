@@ -1,4 +1,4 @@
-prefix=$TRAVIS_BUILD_DIR/fann_library
+prefix=/home/travis/build/jacekm-git/HsPredictor/fann_library
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
