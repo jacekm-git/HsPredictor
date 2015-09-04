@@ -1,7 +1,7 @@
-prefix=$TRAVIS_BUILD_DIR
+prefix=$TRAVIS_BUILD_DIR/fann_library
 exec_prefix=${prefix}
-libdir=${exec_prefix}/fann_library/lib
-includedir=${prefix}/fann_library/include
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
 
 
 Name: fann
