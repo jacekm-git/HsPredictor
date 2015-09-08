@@ -2,18 +2,19 @@
 module TestSuites.ExportCSVSpec (spec) where
 
 --standard
-import System.IO (openFile, hGetContents,
-                  hClose, IOMode(ReadMode))
+import           Control.Monad            (liftM)
+import           System.IO                (IOMode (ReadMode), hClose,
+                                           hGetContents, openFile)
 -- 3rd party
-import Test.Hspec.Contrib.HUnit(fromHUnitTest)
-import Test.Hspec (hspec)
-import Test.HUnit
+import           Test.Hspec               (hspec)
+import           Test.Hspec.Contrib.HUnit (fromHUnitTest)
+import           Test.HUnit
 -- own
-import HelperFuncs (removeIfExists)
-import HsPredictor.LoadCSV (getFileContents, loadCSV)
-import HsPredictor.ExportCSV
-import HsPredictor.ParserCSV (readMatches)
-import HsPredictor.Types
+import           HelperFuncs              (removeIfExists)
+import           HsPredictor.ExportCSV
+import           HsPredictor.LoadCSV      (getFileContents, loadCSV)
+import           HsPredictor.ParserCSV    (readMatches)
+import           HsPredictor.Types
 
 main = hspec $ spec
 
@@ -41,7 +42,7 @@ setUpExport = do
   removeIfExists testExportPath
   removeIfExists testDbPath3
 
-  
+
 test_genListsByDate = TestCase $ do
   let test_list = [Match 20000101 "Home" "Away" 1 1 1 2 3,
                    Match 20000101 "Home" "Away" 2 1 1 2 3,
@@ -55,7 +56,7 @@ test_genListsByDate = TestCase $ do
                   [Match 20000102 "Home" "Away" 4 1 1 2 3],
                   [Match 20000103 "Home" "Away" 5 1 1 2 3]]
   (genListsByDate test_list) @?= gen_list
-    
+
 test_getScaledStats = TestCase $ do
   setUp
   a <- getScaledStats testDbPath "A"
@@ -111,7 +112,7 @@ test_export = TestCase $ do
   export testDbPath3 testExportPath testFilePath
   exp <- getFileContents testExportPath
   let exp_list = lines exp
-  length exp_list @?= 24
-  exp_list !! 0 @?= "-1.0 -1.0 -1.0 -1.0 -1.0 -1.0 "
-  exp_list !! 1 @?= "-1"
-
+  length exp_list @?= 25
+  exp_list !! 0 @?= "12 6 1"
+  exp_list !! 1 @?= "-1.0 -1.0 -1.0 -1.0 -1.0 -1.0 "
+  exp_list !! 2 @?= "-1"

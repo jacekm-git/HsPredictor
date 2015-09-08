@@ -1,6 +1,7 @@
 module HsPredictor.ExportCSV where
 
 -- standard
+import           Control.Monad           (liftM)
 import           Data.Text               (pack)
 import           System.IO               (appendFile)
 -- 3rd party
@@ -126,6 +127,18 @@ insertRound xs dbPath = runSqlite (pack dbPath) $ do
   runMigrationSilent migrateAll
   mapM_ insertMatch xs
 
+{-| Add header to export file. Number of exported
+matches, number of input neurons, number of output neurons -}
+addHeader :: String -- ^ path to export file
+             -> IO ()
+addHeader path = do
+  f <- lines `liftM` getFileContents path
+  let input = show . length . words . head $ f
+  let output = show . length . words $ f !! 1
+  let matches = show $ length f `div` 2
+  let header = matches ++ " " ++ input ++ " " ++ output ++ "\n"
+  let new = header ++ (unlines f)
+  writeFile path new
 
 {-| Insert CSV file to database and write data to export file -}
 export :: String -- ^ path to database
@@ -137,4 +150,5 @@ export dbPath expPath csvPath = do
   let matches = readMatches $ lines ms
   let rounds = genListsByDate matches
   mapM_ (processRound dbPath expPath) rounds
+  addHeader expPath
   return ()
