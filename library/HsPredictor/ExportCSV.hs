@@ -137,7 +137,7 @@ addHeader path = do
   let output = show . length . words $ f !! 1
   let matches = show $ length f `div` 2
   let header = matches ++ " " ++ input ++ " " ++ output ++ "\n"
-  let new = header ++ (unlines f)
+  let new = header ++ unlines f
   writeFile path new
 
 {-| Insert CSV file to database and write data to export file -}

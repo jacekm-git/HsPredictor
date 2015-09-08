@@ -12,7 +12,7 @@ trainAndSaveANN :: String -- ^ path to exported file
                 -> Int -- ^ reports frequency (0 - no reports)
                 -> Double -- ^ desired error (stops training whech achieved)
                 -> IO ()
-trainAndSaveANN expPath savePath epochs reports desiredError = do
+trainAndSaveANN expPath savePath epochs reports desiredError =
   withStandardFann fannDef $ \fann -> do
     setActivationFunctionHidden fann activationSigmoidSymmetric
     setActivationFunctionOutput fann activationSigmoidSymmetric
