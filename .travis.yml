@@ -8,14 +8,15 @@ install:
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
 - cabal install happy
 - cabal sandbox init
-- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/home/travis/build/jacekm-git/HsPredictor/fann_library/lib/pkgconfig/
-- export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/travis/build/jacekm-git/HsPredictor/fann_library/lib/
+- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/HsPredictor/fann_library/lib/pkgconfig/
+- export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/HsPredictor/fann_library/lib/
+- pkg-config --define-variable=prefix=${TRAVIS_BUILD_DIR} fann
 - cabal install --only-dependencies --enable-tests
 - cd .other_dependancies_sandbox
 - cabal sandbox init
 - cabal install hpc-coveralls
 - cd ..
-- export PATH=$PATH:$TRAVIS_BUILD_DIR/.other_dependancies_sandbox/.cabal-sandbox/bin
+- export PATH=$PATH:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
 before_script:
 - cabal configure --enable-tests --enable-library-coverage
 - cabal build
