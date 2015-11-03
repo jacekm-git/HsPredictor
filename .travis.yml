@@ -6,7 +6,7 @@ cache:
     - $TRAVIS_BUILD_DIR/.other_dependancies_sandbox
 install:
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
-- cd fann_library/lib/pkgconfig/init.sh
+- cd fann_library/lib/pkgconfig/
 - sh init.sh
 - cd $TRAVIS_BUILD_DIR
 - cabal install happy
