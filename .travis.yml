@@ -10,7 +10,7 @@ install:
 - cabal sandbox init
 - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/HsPredictor/fann_library/lib/pkgconfig/
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/HsPredictor/fann_library/lib/
-- pkg-config --define-variable=prefix=${TRAVIS_BUILD_DIR} fann
+- pkg-config --define-variable=prefix=${TRAVIS_BUILD_DIR}/HsPredictor/fann_library fann
 - cabal install --only-dependencies --enable-tests
 - cd .other_dependancies_sandbox
 - cabal sandbox init
