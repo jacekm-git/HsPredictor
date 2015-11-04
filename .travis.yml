@@ -4,6 +4,7 @@ cache:
   directories:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
     - $TRAVIS_BUILD_DIR/.other_dependancies_sandbox
+    - $HOME/.cabal
 install:
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
 - cd fann_library/lib/pkgconfig/
