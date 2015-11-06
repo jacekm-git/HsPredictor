@@ -1,0 +1,2 @@
+#!/usr/bin/sh
+docker run --rm -i -t -v $(pwd):/app hspredictor/cabal $*

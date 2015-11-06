@@ -1,0 +1,17 @@
+#! /bin/sh -eux
+# Script based on: https://tesser.org/doc/posts/2015-08-21-statically-linking-libgmp-in-haskell-programs.html
+
+# Remove some libs from dynamic linking
+CCARGS=$(echo "$@" | sed -e 's/-lfann//g' | sed -e 's/-ldoublefann//g' | sed -e 's/-lpng//g' | sed -e 's/-lgmp//g')
+
+
+#Paths to static libraries
+LIBDIR_="/usr/lib/x86_64-linux-gnu/"
+FANN=${LIBDIR_}libfann.a
+FANND=${LIBDIR_}libdoublefann.a
+PNG=${LIBDIR_}libpng12.a
+GMP=${LIBDIR_}libgmp.a
+FLTK="/app/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.4/fltkhs-0.3.0.1/libfltkc.a"
+
+# modified gcc command, static libraries at the end
+gcc $CCARGS $FANN $FANND $PNG $GMP $FLTK
