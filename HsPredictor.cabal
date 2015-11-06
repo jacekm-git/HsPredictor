@@ -56,7 +56,7 @@ executable HsPredictor-exec
   build-depends:    base
                   , HsPredictor
   if !flag(travis)
-    build-depends: fltkhs == 0.3.0.*
+    build-depends: fltkhs == 0.3.0.*, adsad
     main-is:          Main.hs
     ghc-options: -static -pgml linker-config
   else
