@@ -20,9 +20,9 @@ install:
 - cabal sandbox init
 - cabal install hpc-coveralls cabal-install
 - cd ..
-- export PATH=$PATH:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
+- export PATH=${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin:$PATH
 before_script:
-- cabal configure --enable-library-coverage --enable-tests -f travis
+- cabal configure --enable-coverage --enable-tests -f travis
 - cabal install
 - cabal build
 script:
