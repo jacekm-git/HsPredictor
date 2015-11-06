@@ -24,7 +24,7 @@ install:
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
 before_script:
 - cabal configure --enable-tests --enable-library-coverage
-- cabal build
+- cabal build Travis
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
