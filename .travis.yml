@@ -16,14 +16,14 @@ install:
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
 - echo $PKG_CONFIG_PATH
 - echo $LD_LIBRARY_PATH
-- cabal install Travis --only-dependencies --enable-tests --enable-library-coverage
 - cd .other_dependancies_sandbox
 - cabal sandbox init
 - cabal install hpc-coveralls
 - cd ..
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
 before_script:
-- cabal build Travis
+- cabal configure --enable-coverage --enable-test
+- cabal build Travis 
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
