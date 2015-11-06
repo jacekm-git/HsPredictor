@@ -18,11 +18,11 @@ install:
 - echo $LD_LIBRARY_PATH
 - cd .other_dependancies_sandbox
 - cabal sandbox init
-- cabal install hpc-coveralls cabal-install
+- cabal install hpc-coveralls 
 - cd ..
 - export PATH=${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin:$PATH
 before_script:
-- cabal configure --enable-coverage --enable-tests -f travis
+- cabal configure --enable-library-coverage --enable-tests -f travis
 - cabal install
 - cabal build
 script:
