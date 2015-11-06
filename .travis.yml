@@ -16,7 +16,7 @@ install:
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
 - echo $PKG_CONFIG_PATH
 - echo $LD_LIBRARY_PATH
-- cabal install --only-dependencies --enable-tests
+- cabal install Travis --only-dependencies --enable-tests
 - cd .other_dependancies_sandbox
 - cabal sandbox init
 - cabal install hpc-coveralls
