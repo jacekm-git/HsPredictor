@@ -17,7 +17,7 @@ cabal-version:       >=1.18
 
 FLAG travis
      Description:helper for travis.org
-     Default:True
+     Default:False
      Manual:True
 
 library
