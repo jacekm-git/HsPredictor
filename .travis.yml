@@ -22,10 +22,10 @@ install:
 - cd ..
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
 before_script:
-- cabal configure -f travis
-- cabal install --enable-coverage --enable-tests
+- cabal configure --enable-coverage --enable-tests -f travis
+- cabal install
 - cabal build
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
-- hpc-coveralls --exclude-dir=tests HUnit
+- hpc-coveralls --exclude-dir=tests hunit
