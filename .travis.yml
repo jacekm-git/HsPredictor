@@ -23,6 +23,9 @@ install:
 - cabal --version
 - which cabal
 - cabal install --enable-tests --enable-coverage -f travis
+before_script:
+-rm Setup.hs
+-echo "import Distribution.Simple\nmain = defaultMain" > Setup.hs
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
