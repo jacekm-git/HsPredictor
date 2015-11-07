@@ -24,6 +24,7 @@ before_script:
 - cabal --version
 - which cabal
 - cabal configure --enable-library-coverage --enable-tests -f travis
+- cabal build
 - cabal install
 script:
 - cabal test --show-details=always --test-options="--color"
