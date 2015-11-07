@@ -23,7 +23,7 @@ install:
 before_script:
 - cabal --version
 - which cabal
-- cabal configure --enable-coverage --enable-tests -f travis
+- cabal configure --enable-library-coverage --enable-tests -f travis
 - cabal install
 script:
 - cabal test --show-details=always --test-options="--color"
