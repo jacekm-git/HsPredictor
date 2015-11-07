@@ -21,7 +21,7 @@ install:
 - echo $PKG_CONFIG_PATH
 - echo $LD_LIBRARY_PATH
 before_script:
-- cabal configure --enable-coverage enable-tests -f travis
+- cabal configure --enable-coverage --enable-tests -f travis
 - cabal install
 script:
 - cabal test --show-details=always --test-options="--color"
