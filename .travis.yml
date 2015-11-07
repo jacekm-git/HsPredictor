@@ -7,7 +7,7 @@ cache:
 install:
 - cd .other_dependancies_sandbox
 - cabal sandbox init
-- cabal install cabal-install hpc-coveralls
+- cabal install cabal-install-1.22.6.0 hpc-coveralls
 - cd ..
 - export PATH=${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin:$PATH
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
