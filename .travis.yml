@@ -20,12 +20,11 @@ install:
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
 - echo $PKG_CONFIG_PATH
 - echo $LD_LIBRARY_PATH
-before_script:
 - cabal --version
 - which cabal
-- cabal configure --enable-library-coverage --enable-tests -f travis
-- cabal build
-- cabal install
+before_script:
+- cabal configure --enable-library-coverage -f travis
+- cabal install --enable-tests
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
