@@ -13,7 +13,7 @@ maintainer:          jacek87markowski@gmail.com
 build-type:          Custom
 stability:           alpha
 -- extra-source-files:
-cabal-version:       >=1.20
+cabal-version:       >=1.18
 
 FLAG travis
      Description:helper for travis.org
