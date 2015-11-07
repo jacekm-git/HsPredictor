@@ -22,9 +22,7 @@ install:
 - echo $LD_LIBRARY_PATH
 - cabal --version
 - which cabal
-before_script:
-- cabal configure --enable-library-coverage -f travis
-- cabal install --enable-tests
+- cabal install --enable-tests --enable-coverage -f travis
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
