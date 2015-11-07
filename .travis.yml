@@ -26,4 +26,4 @@ before_script:
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
-- hpc-coveralls --exclude-dir=tests hunit
+- hpc-coveralls --exclude-dir=tests HUnit
