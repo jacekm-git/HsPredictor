@@ -67,6 +67,7 @@ executable HsPredictor-exec
 
 -- Tests
 test-suite HUnit
+  ghc-options: -fhpc
   default-language:
     Haskell2010
   type:
