@@ -5,20 +5,17 @@ cache:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
     - $TRAVIS_BUILD_DIR/.other_dependancies_sandbox
 install:
+- git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
+- cabal install happy
+- cabal sandbox init
+- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/home/travis/build/jacekm-git/HsPredictor/fann_library/lib/pkgconfig/
+- export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/travis/build/jacekm-git/HsPredictor/fann_library/lib/
+- cabal install --only-dependencies --enable-tests -f travis
 - cd .other_dependancies_sandbox
 - cabal sandbox init
 - cabal install hpc-coveralls
 - cd ..
-- export PATH=${PATH}:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
-- git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
-- cd fann_library/lib/pkgconfig/
-- sh init.sh
-- cd $TRAVIS_BUILD_DIR
-- cabal install happy
-- cabal sandbox init
-- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/pkgconfig/
-- export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
-- cabal install --only-dependencies --enable-tests -f travis
+- export PATH=$PATH:$TRAVIS_BUILD_DIR/.other_dependancies_sandbox/.cabal-sandbox/bin
 before_script:
 - rm Setup.hs
 - mv TravisSetup.hs Setup.hs
