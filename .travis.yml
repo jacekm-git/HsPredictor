@@ -21,7 +21,7 @@ install:
 before_script:
 - rm Setup.hs
 - mv TravisSetup.hs Setup.hs
-- cabal configure --enable-tests --enable-library-coverage -f travis
+- cabal install --dependancies-only --enable-tests --enable-library-coverage -f travis
 - cabal build
 script:
 - cabal test --show-details=always --test-options="--color"
