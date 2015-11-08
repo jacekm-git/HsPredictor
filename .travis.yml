@@ -9,7 +9,7 @@ install:
 - cabal sandbox init
 - cabal install hpc-coveralls
 - cd ..
-- export PATH=${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin:$PATH
+- export PATH=${PATH}:${TRAVIS_BUILD_DIR}/.other_dependancies_sandbox/.cabal-sandbox/bin
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
 - cd fann_library/lib/pkgconfig/
 - sh init.sh
@@ -18,11 +18,11 @@ install:
 - cabal sandbox init
 - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/pkgconfig/
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
+- cabal install --only-dependencies --enable-tests -f travis
 before_script:
 - rm Setup.hs
 - mv TravisSetup.hs Setup.hs
-- cabal install --dependencies-only --enable-tests -f travis
-- cabal configure --enable-tests -f travis
+- cabal configure --enable-tests --enable-library-coverage -f travis
 - cabal build
 script:
 - cabal test --show-details=always --test-options="--color"
