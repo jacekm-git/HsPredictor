@@ -22,7 +22,7 @@ before_script:
 - rm Setup.hs
 - mv TravisSetup.hs Setup.hs
 - cabal install --dependencies-only --enable-tests --enable-library-coverage -f travis
-- cabal build --enable-tests --enable-library-coverage
+- cabal build --enable-tests
 script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
