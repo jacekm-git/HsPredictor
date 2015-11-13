@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns      #-}
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE OverloadedStrings #-}
 module HsPredictor.LoadCSV where
