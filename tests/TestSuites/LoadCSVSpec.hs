@@ -5,12 +5,15 @@ module TestSuites.LoadCSVSpec (spec) where
 --3rd party
 import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
+import Test.Hspec               (hspec)
 --own
 import HsPredictor.LoadCSV
 import HsPredictor.Queries
 import HsPredictor.Types
 import HelperFuncs (removeIfExists)
 
+
+main = hspec $ spec
 
 spec = fromHUnitTest $ TestList [
   TestLabel ">>stats" test_stats,
@@ -20,14 +23,15 @@ spec = fromHUnitTest $ TestList [
   TestLabel ">>reloadCSV" test_reloadCSV,
   TestLabel ">>getFileContents" test_getFileContents
   ]
-                
+
 testFilePath = "tests/tmp/test.csv"
+testFilePathLong = "tests/tmp/long.txt"
 testDbPath = "tests/tmp/test.db"
 
 setUp = do
   removeIfExists testDbPath
   loadCSV testFilePath testDbPath
-  
+
 test_stats = TestCase $ do
   setUp
   teams <- getTeams testDbPath
@@ -53,7 +57,7 @@ test_resultsUpcoming = TestCase $ do
   setUp
   r <- getResultsUpcoming testDbPath
   (length r) @?= 2
-  
+
 test_reloadCSV = TestCase $ do
   setUp
   r <- getResultsAll testDbPath
@@ -66,3 +70,6 @@ test_reloadCSV = TestCase $ do
 test_getFileContents = TestCase $ do
   c <- getFileContents testFilePath
   assertBool "getFileContents" ("" /= c)
+  longFile <- getFileContents testFilePathLong
+  let l = length . lines $ longFile
+  assertBool "getFileContents" (l == 1000)

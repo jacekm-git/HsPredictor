@@ -19,7 +19,7 @@ import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
                                           runMigration, runMigrationSilent,
                                           selectList, selectList, toSqlKey,
                                           update, (+=.), (=.), (==.), (>.))
-import           Database.Persist.Sqlite (runSqlite)
+import           Database.Persist.Sqlite (runSqlite, transactionSave)
 -- own
 import           HsPredictor.HashCSV     (checkHash, genHash)
 import           HsPredictor.Models
@@ -97,6 +97,7 @@ action xs hashF dbname = runSqlite (pack dbname) $ do
    Just h ->  do
      update (toSqlKey 1 :: MD5Id) [MD5Hash =. hashF]
      bulkInsert xs hashF $ mD5Hash h
+  transactionSave
   return ()
 
 -- | Return file contents
@@ -105,8 +106,8 @@ getFileContents fname = readF `catch` handleExists
   where
     readF = do
       csvH <- openFile fname ReadMode
-      !full <- hGetContents csvH
-      hClose csvH
+      full <- hGetContents csvH
+      last full `seq` hClose csvH
       return full
     handleExists e
       | isDoesNotExistError e = return ""
