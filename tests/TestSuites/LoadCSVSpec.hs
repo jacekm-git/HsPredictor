@@ -21,7 +21,8 @@ spec = fromHUnitTest $ TestList [
   TestLabel ">>resultsUpcoming"  test_resultsUpcoming,
   TestLabel ">>resultsAll"  test_resultsAll,
   TestLabel ">>reloadCSV" test_reloadCSV,
-  TestLabel ">>getFileContents" test_getFileContents
+  TestLabel ">>getFileContents" test_getFileContents,
+  TestLabel ">>getStatsAll" test_getStatsAll
   ]
 
 testFilePath = "tests/tmp/test.csv"
@@ -73,3 +74,13 @@ test_getFileContents = TestCase $ do
   longFile <- getFileContents testFilePathLong
   let l = length . lines $ longFile
   assertBool "getFileContents" (l == 1000)
+
+test_getStatsAll = TestCase $ do
+  setUp
+  stats <- getStatsAll testDbPath
+  let s_head = head stats
+  let s_last = last stats
+  let n = length stats
+  s_head @?= ("A", [4,2,0])
+  s_last @?= ("B", [0,2,4])
+  n @?= 4

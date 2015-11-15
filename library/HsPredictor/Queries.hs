@@ -7,7 +7,7 @@ import           Database.Esqueleto      ((^.))
 import qualified Database.Esqueleto      as E
 import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
                                           SelectOpt (LimitTo), selectList,
-                                          toSqlKey, (==.), (>.))
+                                          toSqlKey, (==.), (>.) )
 import           Database.Persist.Sqlite (runSqlite)
 --own
 import           HsPredictor.Models
@@ -119,3 +119,22 @@ getMinStat :: (E.PersistField a, Num a) =>
 getMinStat dbname stat = headUnVal' $ runSqlite (pack dbname)
                       $ E.select
                       $ E.from $ \t -> return $ E.min_ $ t ^. stat
+
+
+getStatsAllQuery :: String -> IO [(E.Value String, Entity StatsTable)]
+getStatsAllQuery dbname = runSqlite (pack dbname)
+              $ E.select
+              $ E.from $ \(t `E.InnerJoin` s) -> do
+                E.on $ s ^. StatsTableTeam E.==. t ^. TeamsId
+                E.orderBy [E.desc (s ^. StatsTableDraw E.+.
+                                   s ^. StatsTableWin E.*. E.val 3)]
+                return (t ^. TeamsName, s)
+
+getStatsAll :: String -> IO [(String, [Int])]
+getStatsAll dbname = do
+  stats <- getStatsAllQuery dbname
+  return $ map extract stats
+  where
+    extract (team, st) = (unVal team, [ statsTableWin . entityVal $  st
+                                      , statsTableDraw . entityVal $  st
+                                      , statsTableLoss . entityVal $  st])
