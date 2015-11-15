@@ -56,7 +56,7 @@ test_resultsAll = TestCase $ do
 
 test_resultsUpcoming = TestCase $ do
   setUp
-  r <- getResultsUpcoming testDbPath
+  r <- getUpcoming testDbPath
   (length r) @?= 2
 
 test_reloadCSV = TestCase $ do

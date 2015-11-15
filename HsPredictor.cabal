@@ -28,6 +28,7 @@ library
                   HsPredictor.Types
                 , HsPredictor.Models
                 , HsPredictor.Queries
+                , HsPredictor.RawSQL
                 , HsPredictor.LoadCSV
                 , HsPredictor.LoadURL
                 , HsPredictor.ParserCSV

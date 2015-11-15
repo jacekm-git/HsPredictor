@@ -2,6 +2,9 @@ module HsPredictor.Types where
 
 type ThrowsError = Either String
 
+type DbPath = String
+type TeamName = String
+
 -- | Match - contains all parsed values
 data Match = Match {
   dateM  :: Int,
