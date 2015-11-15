@@ -36,6 +36,7 @@ library
                 , HsPredictor.HashCSV
                 , HsPredictor.ExportCSV
                 , HsPredictor.ANN
+                , HsPredictor.Render
 
   build-depends:
                 base ==4.7.*
