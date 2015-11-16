@@ -11,6 +11,6 @@ renderTableCb out inp _ = do
   csv <- getValue inp
   let db = csv ++ ".db"
   loadCSV csv db
-  rTable <- renderTable db
+  rTable <- renderTable db 15
   setValue out rTable Nothing
   return ()
