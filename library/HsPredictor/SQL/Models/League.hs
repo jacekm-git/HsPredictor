@@ -5,7 +5,7 @@
 {-# LANGUAGE QuasiQuotes                #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
-module HsPredictor.SQL.Models where
+module HsPredictor.SQL.Models.League where
 
 -- 3rd party
 import           Database.Persist.TH (mkMigrate, mkPersist, persistLowerCase,

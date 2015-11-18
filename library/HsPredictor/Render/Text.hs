@@ -1,7 +1,7 @@
 module HsPredictor.Render.Text where
 
 import HsPredictor.SQL.Queries
-import HsPredictor.Types
+import HsPredictor.Types.Types
 
 
 convertList :: [(String, [Int])] -> [[String]]

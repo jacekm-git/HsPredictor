@@ -9,7 +9,7 @@ import Test.Hspec               (hspec)
 --own
 import HsPredictor.CSV.Load
 import HsPredictor.SQL.Queries
-import HsPredictor.Types
+import HsPredictor.Types.Types
 import HelperFuncs (removeIfExists)
 
 

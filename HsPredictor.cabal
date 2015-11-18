@@ -25,18 +25,18 @@ library
   other-extensions:    GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses, OverloadedStrings, QuasiQuotes, TemplateHaskell, TypeFamilies, FlexibleContexts
   hs-source-dirs:   library
   exposed-modules:
-                  HsPredictor.Types
-                , HsPredictor.Prelude
-                , HsPredictor.SQL.Models
+                  HsPredictor.Prelude
+                , HsPredictor.SQL.Models.League
                 , HsPredictor.SQL.Queries
                 , HsPredictor.SQL.Raw
-                , HsPredictor.CSV.Load
-                , HsPredictor.URL.Load
                 , HsPredictor.Parse.CSV
                 , HsPredictor.Parse.HTML
+                , HsPredictor.CSV.Load
                 , HsPredictor.CSV.Hash
                 , HsPredictor.CSV.Export
                 , HsPredictor.ANN.ANN
+                , HsPredictor.URL.Load
+                , HsPredictor.Types.Types
                 , HsPredictor.Render.FLTK
                 , HsPredictor.Render.Text
 

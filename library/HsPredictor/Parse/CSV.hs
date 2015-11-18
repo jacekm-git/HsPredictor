@@ -8,7 +8,7 @@ import           Data.List                     (sort)
 import           Text.ParserCombinators.Parsec (Parser, char, count, digit, eof,
                                                 many, noneOf, parse, try, (<|>))
 -- own
-import           HsPredictor.Types             (Match (..), ThrowsError)
+import           HsPredictor.Types.Types             (Match (..), ThrowsError)
 
 -- | Parse one line from csv file.
 readMatch :: String -> ThrowsError Match

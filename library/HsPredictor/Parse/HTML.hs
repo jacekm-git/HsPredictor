@@ -14,7 +14,7 @@ import           Text.XML.HXT.Arrow.XmlArrow   (ArrowXml)
 import           Text.XML.HXT.Core
 import           Text.XML.HXT.DOM.TypeDefs     (XmlTree)
 --own
-import           HsPredictor.Types
+import           HsPredictor.Types.Types
 
 -- | Strip whitespaces around string
 strip' :: String -> String

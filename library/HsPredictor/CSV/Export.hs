@@ -11,10 +11,10 @@ import           Database.Persist.Sql
 import           Database.Persist.Sqlite (runSqlite)
 -- own
 import           HsPredictor.CSV.Load     (getFileContents, insertMatch)
-import           HsPredictor.SQL.Models
+import           HsPredictor.SQL.Models.League
 import           HsPredictor.Parse.CSV   (readMatches)
 import           HsPredictor.SQL.Queries
-import           HsPredictor.Types
+import           HsPredictor.Types.Types
 
 {-| Scale value to range [-1,1] -}
 normalize :: Int -- ^ current value

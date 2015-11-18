@@ -1,4 +1,4 @@
-module HsPredictor.Types where
+module HsPredictor.Types.Types where
 
 type ThrowsError = Either String
 

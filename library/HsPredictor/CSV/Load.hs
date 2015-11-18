@@ -21,10 +21,10 @@ import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
 import           Database.Persist.Sqlite (runSqlite, transactionSave)
 -- own
 import           HsPredictor.CSV.Hash     (checkHash, genHash)
-import           HsPredictor.SQL.Models
+import           HsPredictor.SQL.Models.League
 import           HsPredictor.Parse.CSV   (readMatches)
 import           HsPredictor.SQL.Queries
-import           HsPredictor.Types       (Field (..), Match (..), Result (..))
+import           HsPredictor.Types.Types  (Field (..), Match (..), Result (..))
 
 -- | Inserts match to database
 insertMatch :: Match -> SqlPersistM ()

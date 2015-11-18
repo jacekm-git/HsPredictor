@@ -1,7 +1,7 @@
 module HsPredictor.Render.FLTK where
 
 import HsPredictor.SQL.Queries
-import HsPredictor.Types
+import HsPredictor.Types.Types
 import HsPredictor.Render.Text (convertList)
 
 getTableData :: DbPath -> IO [[String]]

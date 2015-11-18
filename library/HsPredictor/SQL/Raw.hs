@@ -10,8 +10,8 @@ import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
                                           toSqlKey, (==.), (>.) )
 import           Database.Persist.Sqlite (runSqlite)
 --own
-import           HsPredictor.SQL.Models
-import           HsPredictor.Types
+import           HsPredictor.SQL.Models.League
+import           HsPredictor.Types.Types
 
 
 getUpcomingQuery, getResultsAllQuery :: DbPath ->IO [(E.Value Int,

@@ -14,7 +14,7 @@ import           HelperFuncs              (removeIfExists)
 import           HsPredictor.CSV.Export
 import           HsPredictor.CSV.Load      (getFileContents, loadCSV)
 import           HsPredictor.Parse.CSV    (readMatches)
-import           HsPredictor.Types
+import           HsPredictor.Types.Types
 
 main = hspec $ spec
 
