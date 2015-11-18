@@ -1,4 +1,4 @@
-module HsPredictor.LoadURL where
+module HsPredictor.URL.Load where
 --standard
 import           Control.Exception             (catch, throwIO)
 import           Prelude                       hiding (catch)

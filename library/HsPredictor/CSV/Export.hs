@@ -1,4 +1,4 @@
-module HsPredictor.ExportCSV where
+module HsPredictor.CSV.Export where
 
 -- standard
 import           Control.Monad           (liftM)
@@ -10,10 +10,10 @@ import qualified Database.Esqueleto      as E
 import           Database.Persist.Sql
 import           Database.Persist.Sqlite (runSqlite)
 -- own
-import           HsPredictor.LoadCSV     (getFileContents, insertMatch)
-import           HsPredictor.Models
-import           HsPredictor.ParserCSV   (readMatches)
-import           HsPredictor.Queries
+import           HsPredictor.CSV.Load     (getFileContents, insertMatch)
+import           HsPredictor.SQL.Models
+import           HsPredictor.Parse.CSV   (readMatches)
+import           HsPredictor.SQL.Queries
 import           HsPredictor.Types
 
 {-| Scale value to range [-1,1] -}

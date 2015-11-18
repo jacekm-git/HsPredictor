@@ -6,8 +6,8 @@ import           Test.Hspec.Contrib.HUnit (fromHUnitTest)
 import           Test.HUnit
 --own
 import           HelperFuncs              (removeIfExists)
-import           HsPredictor.ANN
-import           HsPredictor.ExportCSV
+import           HsPredictor.ANN.ANN
+import           HsPredictor.CSV.Export
 
 main = hspec spec
 spec = fromHUnitTest $ TestList [

@@ -4,7 +4,7 @@ import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.Hspec (hspec)
 import Test.HUnit
 --own
-import HsPredictor.ParserHTML
+import HsPredictor.Parse.HTML
 
 main = hspec spec
 
@@ -21,7 +21,7 @@ matches = [
   "32.08.2014,Everton - Chelsea, 3:6",
   "33.08.2014, Everton - Chelsea",
   "34.08.2014, Everton - Chelsea,"]
-  
+
 shouldBe = [
   "2014.08.15,Swansea,Newcastle Utd,-1,-1,1.92,3.52,4.06 \n",
   "2014.08.30,Everton,Chelsea,3,6,4.05,3.42,1.96 \n",
@@ -40,7 +40,7 @@ fixturesTest = [
 
 fixturesMatchesTest = [
   "2015.08.15,Southampton,Everton,-1,-1,1.94,3.48,4.10 \n",
-  "2015.08.15,Sunderland,Norwich,-1,-1,2.64,3.20,2.81 \n"]               
+  "2015.08.15,Sunderland,Norwich,-1,-1,2.64,3.20,2.81 \n"]
 
 resultsTest = [
   "14.08.2015, Aston Villa - Manchester United, 0:1, 5.17, 3.63, 1.73",
@@ -68,7 +68,7 @@ holesTestList2 = [
   "09.08.2015,Newcastle Utd - Southampton, 2:2, 2.94, 3.22, 2.52"]
 
 
--- tests                 
+-- tests
 test_readMatches = TestCase $ do
   let m = readMatches $ [matches !! 0]
   let m1 = readMatches $ [matches !! 1]
@@ -82,7 +82,7 @@ test_readMatches = TestCase $ do
   m3 @?= [shouldBe !! 3]
   m4 @?= [shouldBe !! 4]
   m5@?= [shouldBe !! 5]
-  
+
 
 test_convertHtml = TestCase $ do
   fixtures <- convertHtmlFile fixturesPath fromFixturesHTML

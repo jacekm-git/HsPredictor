@@ -1,12 +1,11 @@
-module HsPredictor.Render where
+module HsPredictor.Render.Text where
 
-import HsPredictor.Queries
+import HsPredictor.SQL.Queries
 import HsPredictor.Types
 
-header = [["Team", "Win", "Draw", "Loss"]]
 
 convertList :: [(String, [Int])] -> [[String]]
-convertList xs = header ++ map convert xs
+convertList = map convert
   where convert (s, xs) = s : map show xs
 
 addPadding xs width = map convert xs

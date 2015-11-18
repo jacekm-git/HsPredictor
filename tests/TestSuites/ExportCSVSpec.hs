@@ -11,9 +11,9 @@ import           Test.Hspec.Contrib.HUnit (fromHUnitTest)
 import           Test.HUnit
 -- own
 import           HelperFuncs              (removeIfExists)
-import           HsPredictor.ExportCSV
-import           HsPredictor.LoadCSV      (getFileContents, loadCSV)
-import           HsPredictor.ParserCSV    (readMatches)
+import           HsPredictor.CSV.Export
+import           HsPredictor.CSV.Load      (getFileContents, loadCSV)
+import           HsPredictor.Parse.CSV    (readMatches)
 import           HsPredictor.Types
 
 main = hspec $ spec

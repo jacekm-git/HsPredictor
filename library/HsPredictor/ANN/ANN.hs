@@ -1,4 +1,4 @@
-module HsPredictor.ANN where
+module HsPredictor.ANN.ANN where
 
 import           HFANN
 

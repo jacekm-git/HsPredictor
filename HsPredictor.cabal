@@ -26,17 +26,19 @@ library
   hs-source-dirs:   library
   exposed-modules:
                   HsPredictor.Types
-                , HsPredictor.Models
-                , HsPredictor.Queries
-                , HsPredictor.RawSQL
-                , HsPredictor.LoadCSV
-                , HsPredictor.LoadURL
-                , HsPredictor.ParserCSV
-                , HsPredictor.ParserHTML
-                , HsPredictor.HashCSV
-                , HsPredictor.ExportCSV
-                , HsPredictor.ANN
-                , HsPredictor.Render
+                , HsPredictor.Prelude
+                , HsPredictor.SQL.Models
+                , HsPredictor.SQL.Queries
+                , HsPredictor.SQL.Raw
+                , HsPredictor.CSV.Load
+                , HsPredictor.URL.Load
+                , HsPredictor.Parse.CSV
+                , HsPredictor.Parse.HTML
+                , HsPredictor.CSV.Hash
+                , HsPredictor.CSV.Export
+                , HsPredictor.ANN.ANN
+                , HsPredictor.Render.FLTK
+                , HsPredictor.Render.Text
 
   build-depends:
                 base ==4.7.*
@@ -54,6 +56,7 @@ library
               , HandsomeSoup == 0.4.2.*
               , hfann == 0.4.*
 
+
 executable HsPredictor-exec
   build-depends:    base
                   , HsPredictor
@@ -66,6 +69,7 @@ executable HsPredictor-exec
     main-is: Dummy.hs
   default-language: Haskell2010
   hs-source-dirs:   executable
+
 
 -- Tests
 test-suite HUnit

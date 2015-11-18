@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE OverloadedStrings #-}
-module HsPredictor.LoadCSV where
+module HsPredictor.CSV.Load where
 -- standard
 import           Control.Exception       (bracket, catch, throwIO)
 import           Control.Monad           (when)
@@ -20,10 +20,10 @@ import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
                                           update, (+=.), (=.), (==.), (>.))
 import           Database.Persist.Sqlite (runSqlite, transactionSave)
 -- own
-import           HsPredictor.HashCSV     (checkHash, genHash)
-import           HsPredictor.Models
-import           HsPredictor.ParserCSV   (readMatches)
-import           HsPredictor.Queries
+import           HsPredictor.CSV.Hash     (checkHash, genHash)
+import           HsPredictor.SQL.Models
+import           HsPredictor.Parse.CSV   (readMatches)
+import           HsPredictor.SQL.Queries
 import           HsPredictor.Types       (Field (..), Match (..), Result (..))
 
 -- | Inserts match to database

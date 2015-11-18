@@ -6,7 +6,7 @@ import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.Hspec (hspec)
 import Test.HUnit
 --own
-import HsPredictor.LoadURL
+import HsPredictor.URL.Load
 
 main = hspec spec
 spec = fromHUnitTest $ TestList [

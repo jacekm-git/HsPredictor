@@ -1,5 +1,5 @@
 {-# LANGUAGE RankNTypes #-}
-module HsPredictor.ParserHTML where
+module HsPredictor.Parse.HTML where
 import           Control.Monad                 (replicateM)
 import           Data.Char                     (isDigit)
 import           Data.List                     (intercalate, sort)

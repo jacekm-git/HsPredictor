@@ -1,4 +1,4 @@
-module HsPredictor.ParserCSV where
+module HsPredictor.Parse.CSV where
 
 -- standard
 import           Control.Monad                 (replicateM)

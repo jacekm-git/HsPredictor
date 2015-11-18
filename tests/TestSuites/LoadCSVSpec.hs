@@ -7,8 +7,8 @@ import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
 import Test.Hspec               (hspec)
 --own
-import HsPredictor.LoadCSV
-import HsPredictor.Queries
+import HsPredictor.CSV.Load
+import HsPredictor.SQL.Queries
 import HsPredictor.Types
 import HelperFuncs (removeIfExists)
 

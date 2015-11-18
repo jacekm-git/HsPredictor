@@ -1,4 +1,4 @@
-module HsPredictor.Queries where
+module HsPredictor.SQL.Queries where
 
 --standard
 import           Data.Text               (pack)
@@ -10,9 +10,9 @@ import           Database.Persist.Sql    (Entity (..), Filter, Key (..),
                                           toSqlKey, (==.), (>.) )
 import           Database.Persist.Sqlite (runSqlite)
 --own
-import           HsPredictor.Models
+import           HsPredictor.SQL.Models
 import           HsPredictor.Types
-import           HsPredictor.RawSQL
+import           HsPredictor.SQL.Raw
 
 
 unVal :: E.Value a -> a

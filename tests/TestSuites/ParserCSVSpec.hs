@@ -2,7 +2,7 @@ module TestSuites.ParserCSVSpec (spec) where
 
 import Test.Hspec.Contrib.HUnit(fromHUnitTest)
 import Test.HUnit
-import HsPredictor.ParserCSV
+import HsPredictor.Parse.CSV
 import HsPredictor.Types
 
 spec = fromHUnitTest $ TestList [
