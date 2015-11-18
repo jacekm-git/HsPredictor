@@ -2,15 +2,17 @@ module Callbacks where
 import qualified Graphics.UI.FLTK.LowLevel.FL as FL
 import Graphics.UI.FLTK.LowLevel.Fl_Types
 import Graphics.UI.FLTK.LowLevel.FLTKHS
-
-import HsPredictor.Render
+import Data.IORef
+import HsPredictor.RenderFLTK
 import HsPredictor.LoadCSV
 
-renderTableCb :: Ref Output -> Ref Input -> Ref Button -> IO ()
-renderTableCb out inp _ = do
+
+btnCallback :: IORef [[String]] -> Ref Table
+               -> Ref Input -> Ref Button -> IO ()
+btnCallback tableData table inp _ = do
   csv <- getValue inp
   let db = csv ++ ".db"
   loadCSV csv db
-  rTable <- renderTable db 15
-  setValue out rTable Nothing
-  return ()
+  newtData <- getTableData db
+  writeIORef tableData newtData
+  redraw table
