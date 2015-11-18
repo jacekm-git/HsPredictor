@@ -28,5 +28,5 @@ script:
 - cabal test --show-details=always --test-options="--color"
 after_script:
 - hpc-coveralls --exclude-dir=tests \
-                --exclude-dir="library/HsPredictor/Models" \
+                --exclude-dir="library/HsPredictor/SQL/Models" \
                 --exclude-dir="library/HsPredictor/Types" HUnit
