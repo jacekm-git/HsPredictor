@@ -31,8 +31,8 @@ shouldBe = [
   "2014.08.34,Everton,Chelsea,-1,-1,-1.0,-1.0,-1.0 \n"]
 
 -- convertHtml test data
-resultsPath = "tests/tmp/results.html"
-fixturesPath = "tests/tmp/fixtures.html"
+resultsPath = "tests/tmp/results"
+fixturesPath = "tests/tmp/fixtures"
 
 fixturesTest = [
   "15.08.2015 13:45, Southampton - Everton, 1.94, 3.48, 4.10",
