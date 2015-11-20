@@ -2,8 +2,9 @@ language: haskell
 ghc: 7.8
 cache:
   directories:
-    - $TRAVIS_BUILD_DIR/.cabal-sandbox
-    - $TRAVIS_BUILD_DIR/.coveralls
+    - ${TRAVIS_BUILD_DIR}/.cabal-sandbox
+    - ${TRAVIS_BUILD_DIR}/.coveralls
+    - ${HOME}/.cabal
 install:
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
 - cd fann_library/lib/pkgconfig/
@@ -11,7 +12,8 @@ install:
 - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/pkgconfig/
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
 - cd $TRAVIS_BUILD_DIR
-- happy --version
+- cabal install happy
+- export PATH=${HOME}/.cabal/bin:${PATH}
 - cd .coveralls
 - cabal sandbox init
 - cabal install hpc-coveralls
