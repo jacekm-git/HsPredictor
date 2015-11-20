@@ -20,7 +20,7 @@ install:
 - cabal configure --prefix="${PWD}/.cabal-sandbox"
 - cabal build
 - cabal copy
-- mv -fr .cabal-sandbox $TRAVIS_BUILD_DIR/.happy/
+- mv -r .cabal-sandbox $TRAVIS_BUILD_DIR/.happy/
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.happy/.cabal-sandbox/bin
 - cd $TRAVIS_BUILD_DIR
 - which happy
