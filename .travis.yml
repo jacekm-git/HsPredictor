@@ -19,12 +19,12 @@ install:
 - cabal install --dependencies-only
 - cabal configure --prefix="${PWD}/.cabal-sandbox"
 - cabal build
-- cabal copy
+- cabal install
 - mv .cabal-sandbox $TRAVIS_BUILD_DIR/.happy/
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.happy/.cabal-sandbox/bin
 - cd $TRAVIS_BUILD_DIR
 - which happy
-- cd .other_dependancies_sandbox
+- cd .coveralls
 - cabal sandbox init
 - cabal install hpc-coveralls
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.coveralls/.cabal-sandbox/bin
