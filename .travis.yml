@@ -4,7 +4,7 @@ cache:
   directories:
     - $TRAVIS_BUILD_DIR/.cabal-sandbox
     - $TRAVIS_BUILD_DIR/.coveralls
-    - $TRAVIS_BUILD_DIR/happy-1.19.5
+    - $TRAVIS_BUILD_DIR/.happy
 install:
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
 - cd fann_library/lib/pkgconfig/
@@ -15,10 +15,12 @@ install:
 - cabal get happy-1.19.5
 - cd happy-1.19.5
 - cabal sandbox init
+- cp -r $TRAVIS_BUILD_DIR/.happy/* .
 - cabal install --dependencies-only
 - cabal configure --prefix="${PWD}/.cabal-sandbox"
 - cabal build
 - cabal copy
+- mv -fr .cabal-sandbox $TRAVIS_BUILD_DIR/.happy/
 - export PATH=$PATH:${TRAVIS_BUILD_DIR}/.happy/.cabal-sandbox/bin
 - cd $TRAVIS_BUILD_DIR
 - which happy
