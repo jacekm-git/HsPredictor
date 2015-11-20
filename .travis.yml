@@ -15,7 +15,7 @@ install:
 - cabal get happy-1.19.5
 - cd happy-1.19.5
 - cabal sandbox init
-- cp -r $TRAVIS_BUILD_DIR/.happy/* .
+- cp -r $TRAVIS_BUILD_DIR/.happy/.cabal-sandbox . || echo 1
 - cabal install --dependencies-only
 - cabal configure --prefix="${PWD}/.cabal-sandbox"
 - cabal build
