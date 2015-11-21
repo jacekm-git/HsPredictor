@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 DIRECTORY=${HOME}
-FILE=happys
+FILE=happy
 DPATH=${DIRECTORY}/.cabal/bin/
 FPATH="${DPATH}${FILE}"
 if [ -e "$FPATH" ];
