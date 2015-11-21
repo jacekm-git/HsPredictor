@@ -9,3 +9,4 @@ then
     echo "Happy exists. Do nothing"
 else
     cabal install $FILE
+fi
