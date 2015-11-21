@@ -8,11 +8,11 @@ cache:
 install:
 - git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
 - cd fann_library/lib/pkgconfig/
-- sh travis/init.sh
+- sh init.sh
 - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/pkgconfig/
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
 - cd $TRAVIS_BUILD_DIR
-- sh install_happy.sh
+- sh travis/install_happy.sh
 - export PATH=${HOME}/.cabal/bin:${PATH}
 - cd .coveralls
 - cabal sandbox init
