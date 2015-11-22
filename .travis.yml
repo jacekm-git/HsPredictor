@@ -12,8 +12,8 @@ install:
 - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/pkgconfig/
 - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
 - cd $TRAVIS_BUILD_DIR
-- sh travis/install_happy.sh
 - export PATH=${HOME}/.cabal/bin:${PATH}
+- ${HOME}/.cabal/bin/happy --version || cabal install happy
 - cd .coveralls
 - cabal sandbox init
 - cabal install hpc-coveralls
