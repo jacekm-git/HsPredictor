@@ -4,7 +4,6 @@ cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/.cabal-sandbox
     - ${TRAVIS_BUILD_DIR}/.coveralls
-    - ${HOME}/.cabal/bin
 
 addons:
   apt:
@@ -14,9 +13,8 @@ addons:
   apt:
     packages:
     - libfann-dev
+    - happy
 install:
-- export PATH=${HOME}/.cabal/bin:${PATH}
-- ${HOME}/.cabal/bin/happy --version || cabal install happy
 - cd .coveralls
 - cabal sandbox init
 - cabal install hpc-coveralls
