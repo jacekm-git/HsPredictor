@@ -5,13 +5,16 @@ cache:
     - ${TRAVIS_BUILD_DIR}/.cabal-sandbox
     - ${TRAVIS_BUILD_DIR}/.coveralls
     - ${HOME}/.cabal/bin
+
+addons:
+  apt:
+  sources:
+    - deadsnakes
+    - ubuntu-toolchain-r-test
+  apt:
+    packages:
+    - libfann-dev
 install:
-- git clone https://jacekm-git@bitbucket.org/jacekm-git/fann_library.git
-- cd fann_library/lib/pkgconfig/
-- sh init.sh
-- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/pkgconfig/
-- export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/fann_library/lib/
-- cd $TRAVIS_BUILD_DIR
 - export PATH=${HOME}/.cabal/bin:${PATH}
 - ${HOME}/.cabal/bin/happy --version || cabal install happy
 - cd .coveralls
