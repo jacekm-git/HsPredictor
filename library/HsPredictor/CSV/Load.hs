@@ -28,8 +28,8 @@ import           HsPredictor.Types.Types  (Field (..), Match (..), Result (..))
 
 -- | Inserts match to database
 insertMatch :: Match -> SqlPersistM ()
-insertMatch (Match {dateM=d,homeM=ht,awayM=at,ghM=gh,gaM=ga,
-                    odds1M=o1,oddsxM=ox,odds2M=o2}) = do
+insertMatch Match {dateM=d,homeM=ht,awayM=at,ghM=gh,gaM=ga,
+                    odds1M=o1,oddsxM=ox,odds2M=o2} = do
   idHome <- getKeyTeams ht
   idAway <- getKeyTeams at
   insert $ Results d idHome idAway gh ga o1 ox o2
