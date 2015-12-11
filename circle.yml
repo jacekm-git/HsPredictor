@@ -3,12 +3,11 @@ machine:
     version: 7.8.4
 dependencies:
   cache_directories:
-    - $PWD/.cabal-sandbox/
+    - ${PWD}/.cabal-sandbox/
   override:
-    - cabal sandbox init
-    - cabal install --only-dependencies --enable-tests
-    - cabal configure --enable-tests
-    - cabal build
+    - sudo debian_sandbox cabal sandbox init
+    - sudo debian_sandbox cabal install --only-dependencies --enable-tests
 test:
   override:
     - sudo sh debian_sandbox cabal test --show-details=always --test-options="--color"
+    - sudo sh debian_sandbox build
