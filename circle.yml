@@ -3,9 +3,12 @@ machine:
     version: 7.8.4
   services:
         - docker
-test:
+dependencies:
   cache_directories:
     - .cabal-sandbox/
+  override:
+    - docker pull jacekxp2/hspredictor:latest
+test:
   override:
     - sudo sh debian_sandbox
     - cabal sandbox init
