@@ -7,7 +7,7 @@ dependencies:
   cache_directories:
     - .cabal-sandbox/
   override:
-    - docker pull jacekxp2/hspredictor:latest
+    - docker pull jacekxp2/hspredictor:build
 test:
   override:
-    - sudo sh debian_sandbox
+    - docker run jacekxp2/hspredictor:build
