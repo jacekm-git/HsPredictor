@@ -5,8 +5,8 @@ dependencies:
   cache_directories:
     - ${PWD}/.cabal-sandbox/
   override:
-    - sudo debian_sandbox cabal sandbox init
-    - sudo debian_sandbox cabal install --only-dependencies --enable-tests
+    - sudo sh debian_sandbox cabal sandbox init
+    - sudo sh debian_sandbox cabal install --only-dependencies --enable-tests
 test:
   override:
     - sudo sh debian_sandbox cabal test --show-details=always --test-options="--color"
