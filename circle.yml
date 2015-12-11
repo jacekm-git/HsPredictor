@@ -1,0 +1,14 @@
+machine:
+  ghc:
+    version: 7.8.4
+dependencies:
+  cache_directories:
+    - $PWD/.cabal-sandbox/
+  override:
+    - cabal sandbox init
+    - cabal install --only-dependencies --enable-tests
+    - cabal configure --enable-tests
+    - cabal build
+test:
+  override:
+    - sudo sh debian_sandbox cabal test --show-details=always --test-options="--color"
