@@ -1,6 +1,8 @@
 machine:
   ghc:
     version: 7.8.4
+  services:
+        - docker
 dependencies:
   cache_directories:
     - ${PWD}/.cabal-sandbox/
