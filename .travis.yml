@@ -17,7 +17,8 @@ addons:
 install:
 # required happy version > 1.18 or will not compile
 - export PATH=${HOME}/.cabal/bin:${PATH}
-- ${HOME}/.cabal/bin/happy --version || cabal install happy 
+- ${HOME}/.cabal/bin/happy --version || cabal install happy
+- cabal install cabal-install
 - cd .coveralls
 - cabal sandbox init
 - cabal install hpc-coveralls
