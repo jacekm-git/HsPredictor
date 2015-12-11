@@ -11,7 +11,7 @@ HsPredictor is at very early stage of development.
 * docker
 
 # Installation 
-```
+```sh
 user$ sh debian_sandbox
 docker-root$ cabal sandbox init
 docker-root$ cabal install --only-dependencies --enable-tests
