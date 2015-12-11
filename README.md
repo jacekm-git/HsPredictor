@@ -8,7 +8,8 @@ Predicting outcome of football matches.
 # Warning 
 HsPredictor is at very early stage of development.
 # Dependencies 
-- docker
+* docker
+
 # Installation 
 ```
 user$ sh debian_sandbox
