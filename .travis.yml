@@ -4,7 +4,7 @@ cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/.cabal-sandbox
     - ${TRAVIS_BUILD_DIR}/.coveralls
-    - ${HOME}/.cabal/bin
+    - ${HOME}/.cabal/
 
 addons:
   apt:
