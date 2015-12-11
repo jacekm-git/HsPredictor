@@ -10,4 +10,4 @@ dependencies:
     - docker pull jacekxp2/hspredictor:build
 test:
   override:
-    - docker run jacekxp2/hspredictor:build
+    - docker run -v $(pwd):/app jacekxp2/hspredictor:build 
