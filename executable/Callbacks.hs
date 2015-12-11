@@ -3,8 +3,8 @@ import qualified Graphics.UI.FLTK.LowLevel.FL as FL
 import Graphics.UI.FLTK.LowLevel.Fl_Types
 import Graphics.UI.FLTK.LowLevel.FLTKHS
 import Data.IORef
-import HsPredictor.RenderFLTK
-import HsPredictor.LoadCSV
+import HsPredictor.Render.FLTK
+import HsPredictor.CSV.Load
 
 
 btnCallback :: IORef [[String]] -> Ref Table

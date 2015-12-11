@@ -1,2 +1,3 @@
 #!/usr/bin/sh
-docker run --rm -i -t -v $(pwd):/app hspredictor/cabal $*
+docker pull jacekxp2/hspredictor:latest
+docker run --rm -i -t -v $(pwd):/app jacekxp2/hspredictor:latest $*
