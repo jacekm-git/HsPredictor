@@ -10,8 +10,4 @@ dependencies:
     - docker pull jacekxp2/hspredictor:latest
 test:
   override:
-    - sudo sh debian_sandbox
-    - cabal sandbox init
-    - cabal install --only-dependencies --enable-tests
-    - cabal test --show-details=always --test-options="--color"
-    - cabal build
+    - sudo sh debian_sandbox "cabal sandbox init && cabal install --only-dependencies --enable-tests && cabal test --show-details=always --test-options="--color" && cabal build"
