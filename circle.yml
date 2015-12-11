@@ -5,11 +5,11 @@ machine:
         - docker
 dependencies:
   cache_directories:
-    - ${PWD}/.cabal-sandbox/
+    - .cabal-sandbox/
   override:
     - sudo sh debian_sandbox cabal sandbox init
     - sudo sh debian_sandbox cabal install --only-dependencies --enable-tests
 test:
   override:
     - sudo sh debian_sandbox cabal test --show-details=always --test-options="--color"
-    - sudo sh debian_sandbox build
+    - sudo sh debian_sandbox cabal build
